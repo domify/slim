@@ -16,3 +16,7 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
       - name: Run tests
         run: iyi test
+      # A consumer reads the module's exported signatures from a .iyimod;
+      # this fails when one of them is not fully typed.
+      - name: Check the exported surface
+        run: iyi build slang_test.iyi --emit-iyimod "$RUNNER_TEMP/iyimod" -o "$RUNNER_TEMP/slang_test"

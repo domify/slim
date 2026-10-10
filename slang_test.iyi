@@ -294,7 +294,7 @@ cases = [
   {"splat attributes", attr_splat, "<span class=\"foo\" id=\"bar\"></span>"},
   {"output", output, "<div>hello</div>"},
   {"escaped output with =", output_escape, "<div>&lt;ah&gt;</div>"},
-  {"raw output with ==", output_raw, "<div><ah></div>"},
+  {"raw output with !=", output_raw, "<div><ah></div>"},
   {"inline HTML", html_inline, "<div><ah></div>"},
   {"nested HTML", html_nested, "<div><ah></div>"},
   {"inline text", text_inline, "<ah>"},

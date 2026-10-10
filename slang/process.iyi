@@ -183,7 +183,7 @@ class Lexer
     elsif c == '-'
       @token.escaped = false
       consume_control
-    elsif c == '='
+    elsif c == '=' || (c == '!' && peek_next_char == '=')
       consume_output
     elsif c == '|' || c == '\''
       @token.escaped = false
@@ -356,10 +356,13 @@ class Lexer
 
   private def consume_output : Nil
     @token.type = "OUTPUT"
-    next_char
-    if current_char == '='
+    if current_char == '!'
       @token.escaped = false
       next_char
+    end
+    next_char
+    if current_char == '='
+      raise "slang: raw output is `!=`, not `==`, at line #{@line_number}, column #{@column_number - 1}"
     end
     if current_char == '<'
       @token.prepend_whitespace = true

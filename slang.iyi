@@ -56,30 +56,30 @@ pub struct Slang
     end
   end
 
-  def self.escape(value) : String
+  def self.escape(value : T) : String forall T
     HTML.escape(value.to_s)
   end
 
-  def self.attribute(buffer, name : String, value : Bool) : Nil
+  def self.attribute(buffer : B, name : String, value : Bool) : Nil forall B
     buffer << " " << name if value
   end
 
-  def self.attribute(buffer, name : String, value : Nil) : Nil
+  def self.attribute(buffer : B, name : String, value : Nil) : Nil forall B
   end
 
-  def self.attribute(buffer, name : String, value) : Nil
+  def self.attribute(buffer : B, name : String, value : T) : Nil forall B, T
     buffer << " " << name << "=\"" << HTML.escape(value.to_s) << "\""
   end
 
   # The class names of an element, its `.name`s, `class=` values and the
   # `class` of a splat, without the blank ones.
-  def self.class_attribute(buffer, values : Array(String)) : Nil
+  def self.class_attribute(buffer : B, values : Array(String)) : Nil forall B
     names = values.reject(&.blank?)
     buffer << " class=\"" << HTML.escape(names.join(" ")) << "\"" unless names.empty?
   end
 
   # A `*splat` hash: every entry but `class` as an attribute.
-  def self.splat(buffer, attributes) : Nil
+  def self.splat(buffer : B, attributes : Hash(K, V)) : Nil forall B, K, V
     attributes.each do |name, value|
       attribute(buffer, name.to_s, value) unless name.to_s == "class"
     end

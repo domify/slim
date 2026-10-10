@@ -52,7 +52,7 @@ html lang="en"
     p
       ' Text is <em>HTML</em>,
       | and #{name} in it is escaped.
-    div== "<hr>"
+    div!= "<hr>"
     ul#items
       - items.each do |item|
         li class=(item == current ? "current" : nil) = item
@@ -87,7 +87,7 @@ With `title = "Slang"`, `name = "<world>"`, `items = ["one", "two"]` and
 | `tag: tag` | An element nested on the same line. |
 | `tag text`, `\| text` | Text, which is HTML; `#{expr}` in it is escaped. |
 | `' text` | Text followed by a space. |
-| `tag= expr`, `tag== expr`, `= expr` | Output, escaped or raw, in the element or on its own line. `=<`, `=>`, `tag<` and `tag>` put a space before or after. |
+| `tag= expr`, `tag!= expr`, `= expr`, `!= expr` | Output, escaped or raw, in the element or on its own line. `=<`, `=>`, `tag<` and `tag>` put a space before or after. |
 | `= expr do \|x\|` | A method that takes the nested HTML as a block's `String`, such as a form helper. |
 | `- code` | iyi code: `if`/`elsif`/`else`, `case`/`when`/`in`, `each do`, assignments. |
 | `/ text`, `/! text`, `/[if IE]` | An invisible, a visible and a conditional comment. |
@@ -103,6 +103,8 @@ after a tag or a quoted value, `p= name` and `a href="/"= name` need none.
 
 ## Differences from Crystal Slang 2.0.3
 
+- Raw output is `!=`, as in Haml and Pug, so it does not read as a
+  comparison; `==` stops the template with an error.
 - An attribute whose value is `false` or `nil` is left out and `true` writes
   the bare name, including `id` and the entries of a `*splat` hash.
 - Blank class names are left out, and an element without a class name has no
@@ -113,8 +115,8 @@ after a tag or a quoted value, `p= name` and `a href="/"= name` need none.
 - Fixed bugs of the original:
   - `=<` and `=>` put a space before and after the output; the original
     added it to the code.
-  - `==` and `!=` inside an attribute value are kept; the original dropped
-    every `=` in it.
+  - Comparisons such as `a == b` and `a != b` inside an attribute value are
+    kept; the original dropped every `=` in it.
   - An attribute value such as `(f(x) == y)` no longer ends at the space
     after the inner `)`.
   - Attributes after `a(href="x")` no longer stop the template with
