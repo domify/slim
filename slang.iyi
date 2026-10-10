@@ -12,7 +12,7 @@
 #     html
 #       body
 #         h1.title= title          / escaped output
-#         div== content            / raw output
+#         div!= content            / raw output
 #         - items.each do |item|
 #           a href="#{root}#{item}"= item
 #         input type="checkbox" checked=selected
@@ -22,6 +22,8 @@
 # space, and `tag<` / `tag>` / `=<` / `=>` put one before / after.
 #
 # Differences from the Crystal original:
+#   * Raw output is `!=`, as in Haml; `==` stops the template with an
+#     error.
 #   * An attribute whose value is `false` or `nil` is left out and `true`
 #     writes the bare name, through `Slang.attribute`; this includes `id`,
 #     and the entries of a `*splat` hash.

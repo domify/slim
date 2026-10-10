@@ -35,6 +35,10 @@ a `String::Builder`. The path is read beside the file that calls the macro,
 or as it is when absolute. Local variables of the method that renders a
 template are visible in it.
 
+[TEMPLATES.md](TEMPLATES.md) is a short guide to writing templates, for
+agents and people who know Slim; [AGENTS.md](AGENTS.md) is for working on
+Slang itself.
+
 ## Syntax
 
 ```slim
