@@ -1,0 +1,8 @@
+module refused_outer
+import slang::{Slang}
+
+kept = nil
+Tape.scope do
+  kept = Slang.render("../../spec/text-inline.slang")
+end
+puts kept

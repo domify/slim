@@ -1,0 +1,13 @@
+{
+  "debugger": {
+    "available": false,
+    "reason": "gdb: ptrace: Operation not permitted"
+  },
+  "additional_builder_runs": {
+    "binary": "/tmp/ris-slang-optimized-bench/ris-builder/attributes-bin",
+    "successful_before_failure": 35,
+    "failing_returncode": -11,
+    "instrumentation": "LD_PRELOAD signal capture library; no stack trace was captured"
+  },
+  "status": "Intermittent runtime crash remains undiagnosed; also observed earlier in the unchanged iyi builder control."
+}

@@ -1,0 +1,870 @@
+{
+  "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+  "cpu": "AMD Ryzen 7 PRO 6850U with Radeon Graphics",
+  "iterations": 200000,
+  "rounds": 7,
+  "outputs": {
+    "text": "44000000 18287343291956546853",
+    "attributes": "237400000 8668933173824543845"
+  },
+  "versions": {
+    "iyi": "iyi 0.17.0 (built on Crystal 1.22.0-dev [c8978396c] (2026-10-14))\n\nThe compiler was not built in release mode.",
+    "ris": "ris 0.1.0 (built on iyi 0.17.0, built on Crystal 1.22.0-dev [84dd9d46e] (2026-10-15))\n\nThe compiler was not built in release mode."
+  },
+  "rows": [
+    {
+      "compiler": "iyi",
+      "mode": "render",
+      "workload": "text",
+      "binary": "/tmp/slang-speed-current/iyi-render/text-bin",
+      "build_s": 4.700106711999979,
+      "source_sha256": "ab698a7c347890e6b25127a1ff0a61376f3e70e17d29cee2f7e751e0bc465a69",
+      "module_sources_sha256": {
+        "text.iyi": "ab698a7c347890e6b25127a1ff0a61376f3e70e17d29cee2f7e751e0bc465a69",
+        "slang.iyi": "a36174a68ffa8fc81fdd63c10a77ae781b524ea80fecdfeb094a138912907ed1",
+        "slang/process.iyi": "b5537e5d2e4c941a44fbb56246649b8405798b4f7e59dc6933f719852f10cd86"
+      },
+      "binary_sha256": "0c5ed42377507ce133ab53220e0fa110a889eb49080d0c6a2173f7364b97a14b",
+      "runs": [
+        {
+          "wall_s": 0.24,
+          "user_s": 0.41,
+          "sys_s": 0.01,
+          "rss_kib": 5944.0
+        },
+        {
+          "wall_s": 0.24,
+          "user_s": 0.41,
+          "sys_s": 0.01,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.24,
+          "user_s": 0.41,
+          "sys_s": 0.01,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.24,
+          "user_s": 0.42,
+          "sys_s": 0.0,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.24,
+          "user_s": 0.42,
+          "sys_s": 0.0,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.24,
+          "user_s": 0.41,
+          "sys_s": 0.01,
+          "rss_kib": 6048.0
+        },
+        {
+          "wall_s": 0.24,
+          "user_s": 0.42,
+          "sys_s": 0.0,
+          "rss_kib": 5920.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.24,
+      "median_rss_kib": 5920.0
+    },
+    {
+      "compiler": "iyi",
+      "mode": "render",
+      "workload": "attributes",
+      "binary": "/tmp/slang-speed-current/iyi-render/attributes-bin",
+      "build_s": 2.347266419994412,
+      "source_sha256": "cf779b5d34e5483685daf49d7976a0ac2d24eac1df77c719ee7a44533720353f",
+      "module_sources_sha256": {
+        "attributes.iyi": "cf779b5d34e5483685daf49d7976a0ac2d24eac1df77c719ee7a44533720353f",
+        "slang.iyi": "a36174a68ffa8fc81fdd63c10a77ae781b524ea80fecdfeb094a138912907ed1",
+        "slang/process.iyi": "b5537e5d2e4c941a44fbb56246649b8405798b4f7e59dc6933f719852f10cd86"
+      },
+      "binary_sha256": "63b59ca3bb08711c55295ada2bdb7468d0b79cdc8031d6ef23b03b80b59cdb65",
+      "runs": [
+        {
+          "wall_s": 1.51,
+          "user_s": 2.91,
+          "sys_s": 0.03,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 1.51,
+          "user_s": 2.89,
+          "sys_s": 0.04,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 1.5,
+          "user_s": 2.9,
+          "sys_s": 0.06,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 1.53,
+          "user_s": 2.91,
+          "sys_s": 0.04,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.52,
+          "user_s": 2.91,
+          "sys_s": 0.04,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 1.52,
+          "user_s": 2.91,
+          "sys_s": 0.05,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 1.53,
+          "user_s": 2.93,
+          "sys_s": 0.04,
+          "rss_kib": 5920.0
+        }
+      ],
+      "failures": [],
+      "median_s": 1.52,
+      "median_rss_kib": 5920.0
+    },
+    {
+      "compiler": "iyi",
+      "mode": "builder",
+      "workload": "text",
+      "binary": "/tmp/slang-speed-current/iyi-builder/text-bin",
+      "build_s": 4.485550732002594,
+      "source_sha256": "3f9652cd1c941f1c15c0dbf5aa3c4f3c7a95560faea9ce4f488f3739d589f4b0",
+      "module_sources_sha256": {
+        "text.iyi": "3f9652cd1c941f1c15c0dbf5aa3c4f3c7a95560faea9ce4f488f3739d589f4b0",
+        "slang.iyi": "a36174a68ffa8fc81fdd63c10a77ae781b524ea80fecdfeb094a138912907ed1",
+        "slang/process.iyi": "b5537e5d2e4c941a44fbb56246649b8405798b4f7e59dc6933f719852f10cd86"
+      },
+      "binary_sha256": "a9224fd540b0ddcacd52bb3029e4b477e45b9161c623e2ea3a654e5d2b59e83d",
+      "runs": [
+        {
+          "wall_s": 0.14,
+          "user_s": 0.24,
+          "sys_s": 0.0,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.15,
+          "user_s": 0.24,
+          "sys_s": 0.0,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.14,
+          "user_s": 0.24,
+          "sys_s": 0.0,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.15,
+          "user_s": 0.24,
+          "sys_s": 0.01,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.14,
+          "user_s": 0.24,
+          "sys_s": 0.0,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.15,
+          "user_s": 0.24,
+          "sys_s": 0.01,
+          "rss_kib": 5816.0
+        },
+        {
+          "wall_s": 0.14,
+          "user_s": 0.25,
+          "sys_s": 0.0,
+          "rss_kib": 5792.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.14,
+      "median_rss_kib": 5792.0
+    },
+    {
+      "compiler": "iyi",
+      "mode": "builder",
+      "workload": "attributes",
+      "binary": "/tmp/slang-speed-current/iyi-builder/attributes-bin",
+      "build_s": 2.3368852449930273,
+      "source_sha256": "752c1d2006b2ec15f0c7a42f4a20affc4e03efdb7b87397d6ea071b5fe387b42",
+      "module_sources_sha256": {
+        "attributes.iyi": "752c1d2006b2ec15f0c7a42f4a20affc4e03efdb7b87397d6ea071b5fe387b42",
+        "slang.iyi": "a36174a68ffa8fc81fdd63c10a77ae781b524ea80fecdfeb094a138912907ed1",
+        "slang/process.iyi": "b5537e5d2e4c941a44fbb56246649b8405798b4f7e59dc6933f719852f10cd86"
+      },
+      "binary_sha256": "f9a56ca505487356c718ed754d0d74e1e6c178eec82cd72409558d608c5b9e5b",
+      "runs": [
+        {
+          "wall_s": 1.11,
+          "user_s": 2.22,
+          "sys_s": 0.03,
+          "rss_kib": 5804.0
+        },
+        {
+          "wall_s": 1.1,
+          "user_s": 2.21,
+          "sys_s": 0.02,
+          "rss_kib": 5660.0
+        },
+        {
+          "wall_s": 1.11,
+          "user_s": 2.22,
+          "sys_s": 0.03,
+          "rss_kib": 5664.0
+        },
+        {
+          "wall_s": 1.1,
+          "user_s": 2.19,
+          "sys_s": 0.04,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.09,
+          "user_s": 2.2,
+          "sys_s": 0.03,
+          "rss_kib": 5664.0
+        },
+        {
+          "wall_s": 1.09,
+          "user_s": 2.21,
+          "sys_s": 0.03,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.12,
+          "user_s": 2.22,
+          "sys_s": 0.03,
+          "rss_kib": 5660.0
+        }
+      ],
+      "failures": [],
+      "median_s": 1.1,
+      "median_rss_kib": 5664.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "render",
+      "workload": "text",
+      "binary": "/tmp/slang-speed-current/ris-render/text-bin",
+      "build_s": 4.538710605003871,
+      "source_sha256": "486d93586e6103bd2e5b57b1972d28402af1f4f14f13df5ae3f8da7722f5e2bf",
+      "module_sources_sha256": {
+        "text.ri": "486d93586e6103bd2e5b57b1972d28402af1f4f14f13df5ae3f8da7722f5e2bf",
+        "slang.ri": "99f6b703f5adc19cd0686cdb52e1280c24b2bfb9c89724afb545399ea27b30b0",
+        "slang/process.ri": "805573ca19028e20922853993ea573dbbe8aa7107db939b95bd952ce1df4a053"
+      },
+      "binary_sha256": "f23ff5ef9bb881e9a571e8ab6d7f1e84c3b3afd945923b5f744d00ef12604541",
+      "runs": [
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.06,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.07,
+      "median_rss_kib": 1568.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "render",
+      "workload": "attributes",
+      "binary": "/tmp/slang-speed-current/ris-render/attributes-bin",
+      "build_s": 2.4722910440032138,
+      "source_sha256": "120e6e647bda97e92e78d341f69a4cfafe3c7fc8d7f17e6da948c96f9c0102a5",
+      "module_sources_sha256": {
+        "attributes.ri": "120e6e647bda97e92e78d341f69a4cfafe3c7fc8d7f17e6da948c96f9c0102a5",
+        "slang.ri": "99f6b703f5adc19cd0686cdb52e1280c24b2bfb9c89724afb545399ea27b30b0",
+        "slang/process.ri": "805573ca19028e20922853993ea573dbbe8aa7107db939b95bd952ce1df4a053"
+      },
+      "binary_sha256": "aa059e2dadfa9ea395f0b88f7c87debd4601acfee50c3404da5d0c92502f41fa",
+      "runs": [
+        {
+          "wall_s": 0.43,
+          "user_s": 0.43,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.43,
+          "user_s": 0.42,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.43,
+          "user_s": 0.43,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.43,
+          "user_s": 0.43,
+          "sys_s": 0.0,
+          "rss_kib": 1572.0
+        },
+        {
+          "wall_s": 0.43,
+          "user_s": 0.43,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.43,
+          "user_s": 0.42,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.43,
+          "user_s": 0.43,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.43,
+      "median_rss_kib": 1568.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "render_string",
+      "workload": "text",
+      "binary": "/tmp/slang-speed-current/ris-render_string/text-bin",
+      "build_s": 4.5414493910066085,
+      "source_sha256": "9f82b23caafc9771e2c6284a20d4cd4b1643e0c675fe259e3923feb4fe9a50c8",
+      "module_sources_sha256": {
+        "text.ri": "9f82b23caafc9771e2c6284a20d4cd4b1643e0c675fe259e3923feb4fe9a50c8",
+        "slang.ri": "99f6b703f5adc19cd0686cdb52e1280c24b2bfb9c89724afb545399ea27b30b0",
+        "slang/process.ri": "805573ca19028e20922853993ea573dbbe8aa7107db939b95bd952ce1df4a053"
+      },
+      "binary_sha256": "83ff26784ad13c13c842cd64e7a7e350105b9d885212c8e96da8aa18e30e4234",
+      "runs": [
+        {
+          "wall_s": 0.07,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6432.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6432.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6432.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6432.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6432.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6432.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6432.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.07,
+      "median_rss_kib": 6432.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "render_string",
+      "workload": "attributes",
+      "binary": "/tmp/slang-speed-current/ris-render_string/attributes-bin",
+      "build_s": 2.4194199789926643,
+      "source_sha256": "dd7fcf8ecef69c99441800aea2e95e3ad6037d57b1b0b1b0ac59d61f0b262e90",
+      "module_sources_sha256": {
+        "attributes.ri": "dd7fcf8ecef69c99441800aea2e95e3ad6037d57b1b0b1b0ac59d61f0b262e90",
+        "slang.ri": "99f6b703f5adc19cd0686cdb52e1280c24b2bfb9c89724afb545399ea27b30b0",
+        "slang/process.ri": "805573ca19028e20922853993ea573dbbe8aa7107db939b95bd952ce1df4a053"
+      },
+      "binary_sha256": "369589ead0c862308fadd03eb623c375f148b9226ac635afee07f5edf7074d56",
+      "runs": [
+        {
+          "wall_s": 0.45,
+          "user_s": 0.53,
+          "sys_s": 0.0,
+          "rss_kib": 6304.0
+        },
+        {
+          "wall_s": 0.45,
+          "user_s": 0.52,
+          "sys_s": 0.0,
+          "rss_kib": 6304.0
+        },
+        {
+          "wall_s": 0.46,
+          "user_s": 0.52,
+          "sys_s": 0.01,
+          "rss_kib": 6176.0
+        },
+        {
+          "wall_s": 0.45,
+          "user_s": 0.53,
+          "sys_s": 0.0,
+          "rss_kib": 6304.0
+        },
+        {
+          "wall_s": 0.45,
+          "user_s": 0.52,
+          "sys_s": 0.01,
+          "rss_kib": 6304.0
+        },
+        {
+          "wall_s": 0.45,
+          "user_s": 0.52,
+          "sys_s": 0.0,
+          "rss_kib": 6176.0
+        },
+        {
+          "wall_s": 0.45,
+          "user_s": 0.51,
+          "sys_s": 0.02,
+          "rss_kib": 6304.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.45,
+      "median_rss_kib": 6304.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "builder",
+      "workload": "text",
+      "binary": "/tmp/slang-speed-current/ris-builder/text-bin",
+      "build_s": 4.465961954992963,
+      "source_sha256": "3f9652cd1c941f1c15c0dbf5aa3c4f3c7a95560faea9ce4f488f3739d589f4b0",
+      "module_sources_sha256": {
+        "text.ri": "3f9652cd1c941f1c15c0dbf5aa3c4f3c7a95560faea9ce4f488f3739d589f4b0",
+        "slang.ri": "99f6b703f5adc19cd0686cdb52e1280c24b2bfb9c89724afb545399ea27b30b0",
+        "slang/process.ri": "805573ca19028e20922853993ea573dbbe8aa7107db939b95bd952ce1df4a053"
+      },
+      "binary_sha256": "56c681e742e6525bd54149464e1cbf3bae1bbc3f1ded709833da7d997fca6146",
+      "runs": [
+        {
+          "wall_s": 0.08,
+          "user_s": 0.13,
+          "sys_s": 0.0,
+          "rss_kib": 4896.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.13,
+          "sys_s": 0.0,
+          "rss_kib": 4932.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.13,
+          "sys_s": 0.0,
+          "rss_kib": 5024.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.13,
+          "sys_s": 0.0,
+          "rss_kib": 5024.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.12,
+          "sys_s": 0.01,
+          "rss_kib": 4804.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.13,
+          "sys_s": 0.0,
+          "rss_kib": 4936.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.13,
+          "sys_s": 0.01,
+          "rss_kib": 5024.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.08,
+      "median_rss_kib": 4936.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "builder",
+      "workload": "attributes",
+      "binary": "/tmp/slang-speed-current/ris-builder/attributes-bin",
+      "build_s": 2.3443624669889687,
+      "source_sha256": "752c1d2006b2ec15f0c7a42f4a20affc4e03efdb7b87397d6ea071b5fe387b42",
+      "module_sources_sha256": {
+        "attributes.ri": "752c1d2006b2ec15f0c7a42f4a20affc4e03efdb7b87397d6ea071b5fe387b42",
+        "slang.ri": "99f6b703f5adc19cd0686cdb52e1280c24b2bfb9c89724afb545399ea27b30b0",
+        "slang/process.ri": "805573ca19028e20922853993ea573dbbe8aa7107db939b95bd952ce1df4a053"
+      },
+      "binary_sha256": "99415af878652466edde86d51f23bab1e00bac2a9d87d7844a042ce2fe678010",
+      "runs": [
+        {
+          "wall_s": 0.48,
+          "user_s": 0.8,
+          "sys_s": 0.03,
+          "rss_kib": 4512.0
+        },
+        {
+          "wall_s": 0.49,
+          "user_s": 0.82,
+          "sys_s": 0.02,
+          "rss_kib": 4512.0
+        },
+        {
+          "wall_s": 0.49,
+          "user_s": 0.81,
+          "sys_s": 0.03,
+          "rss_kib": 4512.0
+        },
+        {
+          "wall_s": 0.49,
+          "user_s": 0.82,
+          "sys_s": 0.02,
+          "rss_kib": 4512.0
+        },
+        {
+          "wall_s": 0.49,
+          "user_s": 0.82,
+          "sys_s": 0.02,
+          "rss_kib": 4512.0
+        },
+        {
+          "wall_s": 0.48,
+          "user_s": 0.8,
+          "sys_s": 0.03,
+          "rss_kib": 4384.0
+        },
+        {
+          "wall_s": 0.48,
+          "user_s": 0.82,
+          "sys_s": 0.01,
+          "rss_kib": 4512.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.49,
+      "median_rss_kib": 4512.0
+    },
+    {
+      "compiler": "iyi",
+      "mode": "optimized-render",
+      "workload": "text",
+      "binary": "/tmp/slang-speed-current/iyi-optimized-render/text-bin",
+      "build_s": 4.459142920008162,
+      "source_sha256": "ab698a7c347890e6b25127a1ff0a61376f3e70e17d29cee2f7e751e0bc465a69",
+      "module_sources_sha256": {
+        "text.iyi": "ab698a7c347890e6b25127a1ff0a61376f3e70e17d29cee2f7e751e0bc465a69",
+        "slang.iyi": "fa54e1f10c1198e0eaee288d0bdf266ee73c6e5373d22c603d787efdb9ea5f37",
+        "slang/process.iyi": "805573ca19028e20922853993ea573dbbe8aa7107db939b95bd952ce1df4a053"
+      },
+      "binary_sha256": "d41628372c40d0fc5be270b4f019416ee9fdb637b9c5b27665f5a22c5485fed9",
+      "runs": [
+        {
+          "wall_s": 0.09,
+          "user_s": 0.12,
+          "sys_s": 0.01,
+          "rss_kib": 6172.0
+        },
+        {
+          "wall_s": 0.09,
+          "user_s": 0.13,
+          "sys_s": 0.0,
+          "rss_kib": 6048.0
+        },
+        {
+          "wall_s": 0.09,
+          "user_s": 0.13,
+          "sys_s": 0.0,
+          "rss_kib": 6176.0
+        },
+        {
+          "wall_s": 0.09,
+          "user_s": 0.13,
+          "sys_s": 0.0,
+          "rss_kib": 6172.0
+        },
+        {
+          "wall_s": 0.09,
+          "user_s": 0.12,
+          "sys_s": 0.0,
+          "rss_kib": 6176.0
+        },
+        {
+          "wall_s": 0.09,
+          "user_s": 0.12,
+          "sys_s": 0.0,
+          "rss_kib": 6176.0
+        },
+        {
+          "wall_s": 0.09,
+          "user_s": 0.13,
+          "sys_s": 0.0,
+          "rss_kib": 6172.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.09,
+      "median_rss_kib": 6172.0
+    },
+    {
+      "compiler": "iyi",
+      "mode": "optimized-render",
+      "workload": "attributes",
+      "binary": "/tmp/slang-speed-current/iyi-optimized-render/attributes-bin",
+      "build_s": 2.2813749539927812,
+      "source_sha256": "cf779b5d34e5483685daf49d7976a0ac2d24eac1df77c719ee7a44533720353f",
+      "module_sources_sha256": {
+        "attributes.iyi": "cf779b5d34e5483685daf49d7976a0ac2d24eac1df77c719ee7a44533720353f",
+        "slang.iyi": "fa54e1f10c1198e0eaee288d0bdf266ee73c6e5373d22c603d787efdb9ea5f37",
+        "slang/process.iyi": "805573ca19028e20922853993ea573dbbe8aa7107db939b95bd952ce1df4a053"
+      },
+      "binary_sha256": "1986b07d7ba45aadfe368ff5b338b003e535450f241a72822c4e61cd13c6773b",
+      "runs": [
+        {
+          "wall_s": 0.53,
+          "user_s": 0.85,
+          "sys_s": 0.02,
+          "rss_kib": 4512.0
+        },
+        {
+          "wall_s": 0.53,
+          "user_s": 0.86,
+          "sys_s": 0.01,
+          "rss_kib": 4640.0
+        },
+        {
+          "wall_s": 0.53,
+          "user_s": 0.83,
+          "sys_s": 0.03,
+          "rss_kib": 4640.0
+        },
+        {
+          "wall_s": 0.53,
+          "user_s": 0.84,
+          "sys_s": 0.03,
+          "rss_kib": 4640.0
+        },
+        {
+          "wall_s": 0.53,
+          "user_s": 0.85,
+          "sys_s": 0.01,
+          "rss_kib": 4640.0
+        },
+        {
+          "wall_s": 0.53,
+          "user_s": 0.85,
+          "sys_s": 0.02,
+          "rss_kib": 4520.0
+        },
+        {
+          "wall_s": 0.53,
+          "user_s": 0.86,
+          "sys_s": 0.01,
+          "rss_kib": 4640.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.53,
+      "median_rss_kib": 4640.0
+    },
+    {
+      "compiler": "iyi",
+      "mode": "optimized-builder",
+      "workload": "text",
+      "binary": "/tmp/slang-speed-current/iyi-optimized-builder/text-bin",
+      "build_s": 4.435832930001197,
+      "source_sha256": "3f9652cd1c941f1c15c0dbf5aa3c4f3c7a95560faea9ce4f488f3739d589f4b0",
+      "module_sources_sha256": {
+        "text.iyi": "3f9652cd1c941f1c15c0dbf5aa3c4f3c7a95560faea9ce4f488f3739d589f4b0",
+        "slang.iyi": "fa54e1f10c1198e0eaee288d0bdf266ee73c6e5373d22c603d787efdb9ea5f37",
+        "slang/process.iyi": "805573ca19028e20922853993ea573dbbe8aa7107db939b95bd952ce1df4a053"
+      },
+      "binary_sha256": "f40eb30e1295711a412e8231803e3939160b0d54555352628b1b4dcb22413c12",
+      "runs": [
+        {
+          "wall_s": 0.1,
+          "user_s": 0.15,
+          "sys_s": 0.0,
+          "rss_kib": 5024.0
+        },
+        {
+          "wall_s": 0.1,
+          "user_s": 0.15,
+          "sys_s": 0.01,
+          "rss_kib": 5024.0
+        },
+        {
+          "wall_s": 0.11,
+          "user_s": 0.16,
+          "sys_s": 0.0,
+          "rss_kib": 4896.0
+        },
+        {
+          "wall_s": 0.1,
+          "user_s": 0.14,
+          "sys_s": 0.01,
+          "rss_kib": 4924.0
+        },
+        {
+          "wall_s": 0.1,
+          "user_s": 0.15,
+          "sys_s": 0.0,
+          "rss_kib": 5024.0
+        },
+        {
+          "wall_s": 0.1,
+          "user_s": 0.15,
+          "sys_s": 0.0,
+          "rss_kib": 4896.0
+        },
+        {
+          "wall_s": 0.1,
+          "user_s": 0.16,
+          "sys_s": 0.0,
+          "rss_kib": 5024.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.1,
+      "median_rss_kib": 5024.0
+    },
+    {
+      "compiler": "iyi",
+      "mode": "optimized-builder",
+      "workload": "attributes",
+      "binary": "/tmp/slang-speed-current/iyi-optimized-builder/attributes-bin",
+      "build_s": 2.300793927992345,
+      "source_sha256": "752c1d2006b2ec15f0c7a42f4a20affc4e03efdb7b87397d6ea071b5fe387b42",
+      "module_sources_sha256": {
+        "attributes.iyi": "752c1d2006b2ec15f0c7a42f4a20affc4e03efdb7b87397d6ea071b5fe387b42",
+        "slang.iyi": "fa54e1f10c1198e0eaee288d0bdf266ee73c6e5373d22c603d787efdb9ea5f37",
+        "slang/process.iyi": "805573ca19028e20922853993ea573dbbe8aa7107db939b95bd952ce1df4a053"
+      },
+      "binary_sha256": "0230875cab8ba79ae0f26ef88b8028793fb58d33ef03df28ad494f6c8d663f76",
+      "runs": [
+        {
+          "wall_s": 0.55,
+          "user_s": 0.88,
+          "sys_s": 0.02,
+          "rss_kib": 4512.0
+        },
+        {
+          "wall_s": 0.55,
+          "user_s": 0.87,
+          "sys_s": 0.03,
+          "rss_kib": 4512.0
+        },
+        {
+          "wall_s": 0.55,
+          "user_s": 0.87,
+          "sys_s": 0.03,
+          "rss_kib": 4512.0
+        },
+        {
+          "wall_s": 0.56,
+          "user_s": 0.89,
+          "sys_s": 0.01,
+          "rss_kib": 4512.0
+        },
+        {
+          "wall_s": 0.56,
+          "user_s": 0.9,
+          "sys_s": 0.01,
+          "rss_kib": 4508.0
+        },
+        {
+          "wall_s": 0.56,
+          "user_s": 0.89,
+          "sys_s": 0.01,
+          "rss_kib": 4512.0
+        },
+        {
+          "wall_s": 0.56,
+          "user_s": 0.9,
+          "sys_s": 0.01,
+          "rss_kib": 4512.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.56,
+      "median_rss_kib": 4512.0
+    }
+  ]
+}

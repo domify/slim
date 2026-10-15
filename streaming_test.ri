@@ -1,0 +1,144 @@
+module streaming_test
+import slang::{Slang}
+
+# A consumer implementing only << must still work after direct escaping.
+class Sink
+  @text : String::Builder
+
+  def initialize
+    @text = String::Builder.new
+  end
+
+  def <<(text : String) : Sink
+    @text << text
+    self
+  end
+
+  def to_s : String
+    @text.to_s
+  end
+end
+
+class Counter
+  getter calls : Int32
+  getter events : String
+
+  def initialize
+    @calls = 0
+    @events = ""
+  end
+
+  def reset : Nil
+    @calls = 0
+    @events = ""
+  end
+
+  def name : String
+    @events += "class"
+    "middle"
+  end
+
+  def attrs : Hash(String, String)
+    @calls += 1
+    @events += "splat"
+    {"class" => "last & more", "title" => "x<y"}
+  end
+end
+
+COUNTER = Counter.new
+
+def first_class : String
+  COUNTER.name
+end
+
+def next_attrs : Hash(String, String)
+  COUNTER.attrs
+end
+
+def check(actual : String, expected : String) : Nil
+  if actual != expected
+    puts "FAIL: expected #{expected.inspect}, got #{actual.inspect}"
+    exit 1
+  end
+end
+
+text = "<&>\"' café Привет"
+raw = "<b>raw</b>"
+blank = "　 \t"
+classes = "é & \"test\""
+number = -9223372036854775807_i64 - 1_i64
+expected = "<div><p title=\"&lt;&amp;&gt;&quot;&#39; café Привет\">&lt;&amp;&gt;&quot;&#39; café Привет</p><p><b>raw</b></p><span></span><span class=\"first é &amp; &quot;test&quot;\"></span><span>-9223372036854775808</span></div>"
+check(Slang.render_string("spec/streaming.slang"), expected)
+sink = Sink.new
+Slang.embed("spec/streaming.slang", sink)
+check(sink.to_s, expected)
+
+def tape_page(expected : String) : Nil
+  copy = ""
+  Tape.scope do
+    blank = "　 \t"
+    classes = "é & \"test\""
+    number = -9223372036854775807_i64 - 1_i64
+    # Both escaped and raw tape model values must render without to_s first.
+    text = TapeString.build(1) { |writer| writer.append("<&>\"' café Привет") }
+    raw = TapeString.build(1) { |writer| writer.append("<b>raw</b>") }
+    page = Slang.render("spec/streaming.slang", 0)
+    copy = page.to_s
+    check(copy, expected)
+  end
+  check(copy, expected)
+end
+
+tape_page(expected)
+puts "PASS: streaming escaping, UTF-8, blank classes, custom sink, tape model, zero-capacity growth and retained copy"
+
+COUNTER.reset
+check(Slang.render_string("spec/splat-once.slang"), "<span class=\"first middle last &amp; more\" title=\"x&lt;y\"></span>")
+check(COUNTER.calls.to_s, "1")
+check(COUNTER.events, "classsplat")
+Tape.scope do
+  COUNTER.reset
+  check(Slang.render("spec/splat-once.slang").to_s, "<span class=\"first middle last &amp; more\" title=\"x&lt;y\"></span>")
+  check(COUNTER.calls.to_s, "1")
+  check(COUNTER.events, "classsplat")
+end
+
+# Signed minimum, unsigned maximum, zero and raw numeric output keep their bytes.
+values = [0_i64, -1_i64, 9223372036854775807_i64, -9223372036854775807_i64 - 1_i64]
+Tape.scope do
+  values.each do |value|
+    buffer = Slang::TapeBuffer.new
+    Slang.write_escaped(buffer, value)
+    check(buffer.to_s, value.to_s)
+  end
+  buffer = Slang::TapeBuffer.new
+  Slang.write_raw(buffer, 18446744073709551615_u64)
+  check(buffer.to_s, "18446744073709551615")
+end
+
+check(Slang.escape(text), "&lt;&amp;&gt;&quot;&#39; café Привет")
+check(Slang.escape("plain café"), "plain café")
+check(Slang.escape(""), "")
+
+# render_string opens a scope, returns owned bytes, and leaves no active
+# tape behind. Inside a caller scope it must not release that caller's data.
+check(Slang.render_string("spec/tape-first.slang"), "<p>true</p>")
+raise "render left a tape active" unless IyiRegion.tape == 0_u64
+retained = ""
+Tape.scope do
+  sentinel = TapeString.build { |writer| writer.append("still alive") }
+  retained = Slang.render_string("spec/tape-first.slang")
+  check(sentinel.to_s, "still alive")
+  check(Slang.render("spec/tape-first.slang").to_s, retained)
+end
+Tape.scope do
+  overwrite = Slang::TapeBuffer.new
+  overwrite << "overwrite released storage"
+end
+check(retained, "<p>true</p>")
+raise "nested render left a tape active" unless IyiRegion.tape == 0_u64
+puts "PASS: render uses tape, render_string copies retained output and preserves outer scopes"
+
+Tape.scope do
+  check(Slang.render("spec/tape-first.slang").to_s, "<p>true</p>")
+end

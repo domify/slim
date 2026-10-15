@@ -1,0 +1,37 @@
+built iyi render text
+built iyi render attributes
+built iyi builder text
+built iyi builder attributes
+built ris render text
+built ris render attributes
+built ris render_string text
+built ris render_string attributes
+built ris builder text
+built ris builder attributes
+built iyi optimized-render text
+built iyi optimized-render attributes
+built iyi optimized-builder text
+built iyi optimized-builder attributes
+round 0 complete
+round 1 complete
+round 2 complete
+round 3 complete
+round 4 complete
+round 5 complete
+round 6 complete
+round 7 complete
+text iyi render 0.24 5920.0
+attributes iyi render 1.52 5920.0
+text iyi builder 0.14 5792.0
+attributes iyi builder 1.1 5664.0
+text ris render 0.07 1568.0
+attributes ris render 0.43 1568.0
+text ris render_string 0.07 6432.0
+attributes ris render_string 0.45 6304.0
+text ris builder 0.08 4936.0
+attributes ris builder 0.49 4512.0
+text iyi optimized-render 0.09 6172.0
+attributes iyi optimized-render 0.53 4640.0
+text iyi optimized-builder 0.1 5024.0
+attributes iyi optimized-builder 0.56 4512.0
+results: /tmp/slang-speed-current/results.json

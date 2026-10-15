@@ -1,0 +1,34 @@
+reused iyi render text
+reused iyi render attributes
+reused ris render text
+reused ris render attributes
+reused iyi builder text
+reused iyi builder attributes
+reused ris builder text
+reused ris builder attributes
+reused ris tape-copy text
+reused ris tape-copy attributes
+reused ris tape-consume text
+reused ris tape-consume attributes
+round 0 complete
+round 1 complete
+round 2 complete
+round 3 complete
+round 4 complete
+round 5 complete
+round 6 complete
+FAILED ris builder attributes 139
+round 7 complete
+text iyi render 0.25 5920.0
+attributes iyi render 1.61 5920.0
+text ris render 0.09 6304.0
+attributes ris render 0.53 4640.0
+text iyi builder 0.15 5792.0
+attributes iyi builder 1.13 5792.0
+text ris builder 0.09 5024.0
+attributes ris builder 0.505 4576.0
+text ris tape-copy 0.08 6560.0
+attributes ris tape-copy 0.47 6176.0
+text ris tape-consume 0.07 1568.0
+attributes ris tape-consume 0.44 1568.0
+results: /tmp/ris-slang-optimized-bench/results.json

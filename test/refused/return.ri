@@ -1,0 +1,11 @@
+module refused_return
+import slang::{Slang}
+
+def invalid : TapeString
+  Tape.scope do
+    return Slang.render("../../spec/text-inline.slang")
+  end
+  raise "unreachable"
+end
+
+invalid

@@ -1,0 +1,13 @@
+[
+  {
+    "compiler": "ris",
+    "mode": "builder",
+    "workload": "text",
+    "returncode": 139,
+    "signal": "SIGSEGV",
+    "phase": "clean measurement attempt, after five measured rounds completed",
+    "binary_sha256": "e5f5dfa3655c31105ff3c029cf37b8647abc2319f480ab6ec07fc42ad61d6116",
+    "log": "failed-run.log",
+    "note": "No tape objects in this binary. Cause not diagnosed; timings alone do not establish production reliability."
+  }
+]

@@ -1,29 +1,45 @@
 # Writing Slang templates
 
-A guide for agents and people who write `.slang` templates in an iyi
+A guide for agents and people who write `.slang` templates in a ris
 project. Slang looks like Slim, and most of what you know about Slim holds;
 this page lists where Slang differs, and the mistakes that are easy to make.
 The full syntax table is in the [README](README.md#syntax).
 
 ## Rendering
 
-```iyi
+```ruby
 import github.com/domify/slang::{Slang}
 
-def page(title : String, items : Array(String)) : String
+def page(title : String, items : Array(String)) : TapeString
   Slang.render("views/page.slang")
+end
+
+Tape.scope do
+  html = page("Hello", ["one", "two"])
+  # Consume html's bytes before this scope ends.
 end
 ```
 
-- The template becomes iyi code at compile time. A mistake in it is a
-  compile error that names the template's line, not a run-time error.
-- The path is relative to the `.iyi` file that calls `Slang.render`.
-- The template sees the local variables and arguments of that method, and
-  the constants and functions the file can reach. Pass what it needs as
-  arguments; there is no context object.
-- For a layout, render the page first and pass it in as a `String`:
-  `content = Slang.render("views/page.slang")`, then `main!= content` in
-  the layout.
+- `render(filename, capacity = 256)` returns a `TapeString` and requires the
+  caller's active `Tape.scope`.
+- `render_string(filename, capacity = 256)` returns an independent `String`.
+  It renders on tape and copies before returning, opening a scope if needed.
+- An inner scope shares the outer tape and releases nothing on its own.
+  Repeated copies in one long outer scope retain their temporary buffers.
+- `Slang.embed` accepts a `Slang::TapeBuffer` or another writer with `<<`.
+  A tape buffer's `finish` borrows its bytes; do not append after finishing.
+- The template becomes ris code at compile time; diagnostics name the
+  template's line. The path is relative to the calling `.ri` source file.
+- Keep borrowed return types explicit (`: TapeString`). Use `.to_s` inside
+  the scope when handing text to a retained destination requiring String.
+- Templates see the caller's local variables, arguments and accessible
+  constants/functions.
+- For layouts, pass a rendered `TapeString` to another template within the
+  same scope, or use `render_string` if it must outlive the scope. `!=`
+  writes either result without escaping.
+- Escaped/raw output and ordinary attributes accept `TapeString` directly.
+  Classes retain their String/blank-filtering semantics. Helpers accepting
+  nested HTML still receive a `String`, built with a heap builder.
 
 ## Output and escaping
 
@@ -56,8 +72,8 @@ end
   has no exceptions), no `content_for`, no Kilt.
 - Indentation closes blocks; never write `end`.
 - `if`/`elsif`/`else`, `case`/`when`/`in`, `each do |x|` and assignments
-  work. Longer code goes in an `iyi:` block or, better, in a function of
-  the `.iyi` file.
+  work. Longer code goes in an `ris:` block or, better, in a function of
+  the `.ri` file.
 
 ## Attributes
 

@@ -1,6 +1,6 @@
 # The program `Slang.embed` runs at compile time: `slang/process CALLER
 # TEMPLATE BUFFER` reads the template named beside CALLER (or by an absolute
-# path) and prints the iyi source that renders it into BUFFER. The Crystal
+# path) and prints the ris source that renders it into BUFFER. The Crystal
 # shard's archive/crystal/src/slang/process.cr did the same for Crystal.
 #
 # The lexer, the parser and the node tree are toddsundsted/slang 2.0.3's,
@@ -80,8 +80,8 @@ class Token
 end
 
 class Lexer
-  RAWSTUFF = {"javascript:" => "script", "css:" => "style", "crystal:" => "*code*", "iyi:" => "*code*"}
-  ATTR_OPEN_CLOSE_MAP = {'{' => '}', '[' => ']', '(' => ')', ' ' => ' '}
+  RAWSTUFF                    = {"javascript:" => "script", "css:" => "style", "crystal:" => "*code*", "iyi:" => "*code*", "ris:" => "*code*"}
+  ATTR_OPEN_CLOSE_MAP         = {'{' => '}', '[' => ']', '(' => ')', ' ' => ' '}
   STRING_OPEN_CLOSE_CHARS_MAP = {'(' => ')', '{' => '}', '[' => ']', '<' => '>'}
 
   getter token : Token
@@ -715,8 +715,20 @@ class Node
       w << "::Slang::Slang.attribute(#{buffer}, \"id\", (#{w.loc(id.token)}#{id.value}))"
     end
     classes = attributes.select { |attribute| attribute.token.name == "class" }.map { |attribute| "(#{w.loc(attribute.token)}#{attribute.value}).to_s" }
-    classes << "(#{splat})[\"class\"]?.to_s" if splat
-    w << "::Slang::Slang.class_attribute(#{buffer}, [#{classes.join(", ")}])" unless classes.empty?
+    unless classes.empty? && !splat
+      state = w.unique(buffer)
+      w << "#{state} = false"
+      classes.each do |value|
+        w << "#{state} = ::Slang::Slang.class_part(#{buffer}, #{value}, #{state})"
+      end
+      if splat
+        saved = w.unique(buffer)
+        w << "#{saved} = (#{splat})"
+        splat = saved
+        w << "#{state} = ::Slang::Slang.class_part(#{buffer}, (#{saved})[\"class\"]?.to_s, #{state})"
+      end
+      w << "#{buffer} << \"\\\"\" if #{state}"
+    end
     attributes.each do |attribute|
       attribute_name = attribute.token.name || ""
       next if attribute_name == "id" || attribute_name == "class"
@@ -742,23 +754,23 @@ class Node
     w << "#{buffer} << \" \"" if @token.prepend_whitespace
     w << "#{buffer} << \"\\n\"" if @token.raw_text && !first_child? && !@token.text_block && !empty_parent? && !@token.inline
     w << "#{buffer} << \"#{indentation}\"" if indent? && @token.raw_text
-    open, close = @token.escaped ? {"::Slang::Slang.escape((", "))"} : {"((", ").to_s)"}
+    open, close = @token.escaped ? {"::Slang::Slang.write_escaped(#{buffer}, (", "))"} : {"::Slang::Slang.write_raw(#{buffer}, (", "))"}
     if @token.type == "OUTPUT" && children?
       # `= expr do` passes the block's HTML to the method as a String.
       sub = w.unique(buffer)
-      w << "#{buffer} << #{open}#{w.loc(@token)}#{value}"
+      w << "#{open}#{w.loc(@token)}#{value}"
       w << "String.build do |#{sub}|"
       @nodes.each { |node| node.to_s(w, sub) }
       w << "end"
       w << "end#{close}"
     else
-      w << "#{buffer} << #{open}#{w.loc(@token)}#{value}\n#{close}"
+      w << "#{open}#{w.loc(@token)}#{value}\n#{close}"
       @nodes.each { |node| node.to_s(w, buffer) }
     end
     w << "#{buffer} << \" \"" if @token.append_whitespace
   end
 
-  # A `crystal:` or `iyi:` block: its lines are code, as they are.
+  # A `ris:`, `crystal:` or `iyi:` block: its lines are code, as they are.
   private def code(w : Writer, node : Node) : Nil
     unless node.value.blank?
       w << "#{node.indent? ? node.indentation : ""}#{w.loc(node.token)}#{node.value}"

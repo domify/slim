@@ -1,39 +1,91 @@
 # Slang
 
-Lightweight, terse templates for [iyi](https://iyi.dev/), in the syntax of
+Lightweight, terse templates for ris, in the syntax of
 [Slim](https://github.com/slim-template/slim).
 
 Slang started in 2016 as a template language for Crystal. This repository
-is its continuation as a native iyi module: the lexer, parser and code
-generation of the last Crystal release (2.0.3) are ported to iyi, along with
+is its continuation as a native ris module: the lexer, parser and code
+generation of the last Crystal release (2.0.3) are ported to ris, along with
 its tests. The Crystal code is kept unchanged in
-[`archive/crystal/`](archive/crystal/) and is no longer maintained. The iyi
+[`archive/crystal/`](archive/crystal/) and is no longer maintained. The ris
 port is maintained by Priit Tark at [domify](https://github.com/domify).
 
-Like the original, a template is turned into iyi code at compile time, so a
+Like the original, a template is turned into ris code at compile time, so a
 rendered page is ordinary compiled code by the time the program runs.
 
 ## Installation
 
-```sh
-iyi get github.com/domify/slang
+This local ris port lives in `~/contribute/ris/slang`. Add it to a consuming
+project's `iyi.mod` (adjust the relative path):
+
+```text
+require github.com/domify/slang v0.0.0
+replace github.com/domify/slang => ../ris/slang
 ```
+
+The module retains the original import identity.
 
 ## Usage
 
-```iyi
+```ruby
 import github.com/domify/slang::{Slang}
 
-def page(name : String, items : Array(String)) : String
+def page(name : String, items : Array(String)) : TapeString
   Slang.render("views/page.slang")
+end
+
+Tape.scope do
+  body = page("Mari", ["one", "two"])
+  # Consume body.to_unsafe / body.bytesize synchronously in this scope.
 end
 ```
 
-`Slang.render("file.slang")` is the rendered template as a `String`.
-`Slang.embed("file.slang", io)` writes it to `io`, anything with `<<`, such as
-a `String::Builder`. The path is read beside the file that calls the macro,
-or as it is when absolute. Local variables of the method that renders a
-template are visible in it.
+`Slang.render(filename, capacity = 256)` returns a `TapeString` owned by the
+caller's active `Tape.scope`. There is one internal renderer and one tape
+buffer; Slang has no heap-buffer renderer. Without a scope, tape allocation
+terminates with a diagnostic. The compiler rejects returning or storing the
+tape result beyond its owning scope. Raw pointers remain the caller's
+responsibility.
+
+For an ordinary retained `String`, use the explicit conversion API:
+
+```ruby
+def retained_page(name : String, items : Array(String)) : String
+  Slang.render_string("views/page.slang")
+end
+```
+
+Inside an existing scope, `Slang.render("views/page.slang").to_s` makes the
+same retained copy directly. `render_string` is the convenience spelling
+that also manages a scope when the caller has none.
+
+`render_string(filename, capacity = 256)` uses the same tape renderer and
+copies its output before returning. It opens a scope when none is active.
+Inside an existing scope it shares the caller's tape and reclaims nothing
+until that outer scope ends. Rendering many retained strings in one long
+scope therefore also retains their temporary tape buffers until scope exit.
+
+`Slang.embed(filename, io)` writes directly to a supplied writer implementing
+`<<`. This includes `Slang::TapeBuffer.new(capacity)` in a tape scope and an
+explicitly supplied `String::Builder`. A tape buffer's `finish` returns a
+borrowed `TapeString`; `to_s` makes a retained String copy. Do not append or
+grow that buffer after taking a view of its bytes.
+
+Paths are relative to the source file calling the macro, or used as written
+when absolute. Templates see the calling method's local variables.
+
+A method returning borrowed HTML declares `: TapeString`; a retained
+String declares `: String`. Calling `.to_s` on TapeString copies its bytes
+into an independent String. Caches and other retained destinations accept
+String, so this boundary is checked by the compiler. Domain methods keep
+domain names, without tape/heap prefixes on every call.
+
+Rendering now streams escaped bytes and class names into the sink instead
+of collecting fragments, escaped byte arrays or joined class strings.
+Escaped and raw `TapeString` values and 8–64-bit integer output avoid
+intermediate heap strings. Interpolated expressions forming a String,
+non-integer `to_s`, and HTML blocks passed to helpers retain their String
+semantics and may allocate on the heap.
 
 [TEMPLATES.md](TEMPLATES.md) is a short guide to writing templates, for
 agents and people who know Slim; [AGENTS.md](AGENTS.md) is for working on
@@ -93,10 +145,10 @@ With `title = "Slang"`, `name = "<world>"`, `items = ["one", "two"]` and
 | `' text` | Text followed by a space. |
 | `tag= expr`, `tag!= expr`, `= expr`, `!= expr` | Output, escaped or raw, in the element or on its own line. `=<`, `=>`, `tag<` and `tag>` put a space before or after. |
 | `= expr do \|x\|` | A method that takes the nested HTML as a block's `String`, such as a form helper. |
-| `- code` | iyi code: `if`/`elsif`/`else`, `case`/`when`/`in`, `each do`, assignments. |
+| `- code` | ris code: `if`/`elsif`/`else`, `case`/`when`/`in`, `each do`, assignments. |
 | `/ text`, `/! text`, `/[if IE]` | An invisible, a visible and a conditional comment. |
 | `javascript:`, `css:` | A `script` or `style` element with verbatim text. |
-| `iyi:`, `crystal:` | Lines of iyi code. |
+| `ris:`, `iyi:`, `crystal:` | Lines of ris code. |
 | `doctype html` | `<!DOCTYPE html>`. |
 
 As in Slim, there is no whitespace between tags. An attribute value without
@@ -113,9 +165,14 @@ after a tag or a quoted value, `p= name` and `a href="/"= name` need none.
   the bare name, including `id` and the entries of a `*splat` hash.
 - Blank class names are left out, and an element without a class name has no
   `class` attribute.
-- `iyi:` opens a code block, as `crystal:` does.
-- `begin`/`rescue` lines are parsed, but iyi has no exceptions, so they do not
+- `ris:` opens a code block; `iyi:` and `crystal:` remain compatible aliases.
+- `begin`/`rescue` lines are parsed, but ris has no exceptions, so they do not
   compile. Kilt and Kemal's `content_for` are not supported.
+- `render` returns `TapeString` in a caller-owned `Tape.scope`. Use
+  `render_string` for an independent `String`. Both render through tape;
+  `render_tape`, `render_heap` and the former `Buffer` class are removed.
+- Splat expressions are evaluated once per element, after explicit class
+  expressions and before ordinary attributes.
 - Fixed bugs of the original:
   - `=<` and `=>` put a space before and after the output; the original
     added it to the code.
@@ -130,14 +187,17 @@ after a tag or a quoted value, `p= name` and `a href="/"= name` need none.
 ## Development
 
 ```sh
-iyi test
+./check.sh
 ```
 
-`slang_test.iyi` holds the tests of the Crystal shard's `spec/slang_spec.cr`,
+`slang_test.ri` holds the tests of the Crystal shard's `spec/slang_spec.cr`,
 with their templates under `spec/`, and the port's own additions. The module
-is `slang.iyi` (what rendered code needs at run time, and the macros) and
-`slang/process.iyi` (the lexer, parser and code generation the macros run at
+is `slang.ri` (what rendered code needs at run time, and the macros) and
+`slang/process.ri` (the lexer, parser and code generation the macros run at
 compile time).
+
+Runtime benchmarks comparing iyi, ris, builder and tape output are in
+[`bench/`](bench/README.md). They do not change the public rendering API.
 
 ## Thanks
 

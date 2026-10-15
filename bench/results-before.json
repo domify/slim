@@ -1,0 +1,896 @@
+{
+  "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+  "cpu": "AMD Ryzen 7 PRO 6850U with Radeon Graphics",
+  "iterations": 200000,
+  "rounds": 7,
+  "outputs": {
+    "text": "44000000 18287343291956546853",
+    "attributes": "237400000 8668933173824543845"
+  },
+  "versions": {
+    "iyi": "iyi 0.17.0 (built on Crystal 1.22.0-dev [c8978396c] (2026-10-14))\n\nThe compiler was not built in release mode.",
+    "ris": "ris 0.1.0 (built on iyi 0.17.0, built on Crystal 1.22.0-dev [039a30ccd] (2026-10-15))\n\nThe compiler was not built in release mode."
+  },
+  "rows": [
+    {
+      "compiler": "iyi",
+      "mode": "render",
+      "workload": "text",
+      "binary": "/tmp/ris-slang-bench/iyi-render/text-bin",
+      "build_s": null,
+      "source_sha256": "29449919ab2c08ab909e4bce760baf97b425f3aa3c2feae446cdd8d96b182187",
+      "runs": [
+        {
+          "wall_s": 0.25,
+          "user_s": 0.41,
+          "sys_s": 0.0,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.26,
+          "user_s": 0.43,
+          "sys_s": 0.0,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.26,
+          "user_s": 0.42,
+          "sys_s": 0.01,
+          "rss_kib": 5848.0
+        },
+        {
+          "wall_s": 0.25,
+          "user_s": 0.42,
+          "sys_s": 0.01,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.25,
+          "user_s": 0.43,
+          "sys_s": 0.0,
+          "rss_kib": 6048.0
+        },
+        {
+          "wall_s": 0.26,
+          "user_s": 0.42,
+          "sys_s": 0.0,
+          "rss_kib": 6048.0
+        },
+        {
+          "wall_s": 0.26,
+          "user_s": 0.43,
+          "sys_s": 0.01,
+          "rss_kib": 5920.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.26,
+      "median_rss_kib": 5920.0
+    },
+    {
+      "compiler": "iyi",
+      "mode": "render",
+      "workload": "attributes",
+      "binary": "/tmp/ris-slang-bench/iyi-render/attributes-bin",
+      "build_s": null,
+      "source_sha256": "7ba06783ca7a2b3cc93eda0e5173cbebf42797b6f8d4a9a67ed4dd81b2494860",
+      "runs": [
+        {
+          "wall_s": 1.57,
+          "user_s": 2.91,
+          "sys_s": 0.06,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 1.58,
+          "user_s": 2.9,
+          "sys_s": 0.06,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.57,
+          "user_s": 2.93,
+          "sys_s": 0.04,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 1.6,
+          "user_s": 2.93,
+          "sys_s": 0.05,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 1.6,
+          "user_s": 2.91,
+          "sys_s": 0.05,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 1.59,
+          "user_s": 2.91,
+          "sys_s": 0.07,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.58,
+          "user_s": 2.94,
+          "sys_s": 0.05,
+          "rss_kib": 5920.0
+        }
+      ],
+      "failures": [],
+      "median_s": 1.58,
+      "median_rss_kib": 5920.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "render",
+      "workload": "text",
+      "binary": "/tmp/ris-slang-bench/ris-render/text-bin",
+      "build_s": null,
+      "source_sha256": "29449919ab2c08ab909e4bce760baf97b425f3aa3c2feae446cdd8d96b182187",
+      "runs": [
+        {
+          "wall_s": 0.23,
+          "user_s": 0.4,
+          "sys_s": 0.0,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.24,
+          "user_s": 0.4,
+          "sys_s": 0.01,
+          "rss_kib": 6048.0
+        },
+        {
+          "wall_s": 0.24,
+          "user_s": 0.39,
+          "sys_s": 0.02,
+          "rss_kib": 6044.0
+        },
+        {
+          "wall_s": 0.23,
+          "user_s": 0.41,
+          "sys_s": 0.0,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.25,
+          "user_s": 0.42,
+          "sys_s": 0.0,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.24,
+          "user_s": 0.39,
+          "sys_s": 0.01,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.23,
+          "user_s": 0.41,
+          "sys_s": 0.0,
+          "rss_kib": 5920.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.24,
+      "median_rss_kib": 5920.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "render",
+      "workload": "attributes",
+      "binary": "/tmp/ris-slang-bench/ris-render/attributes-bin",
+      "build_s": null,
+      "source_sha256": "7ba06783ca7a2b3cc93eda0e5173cbebf42797b6f8d4a9a67ed4dd81b2494860",
+      "runs": [
+        {
+          "wall_s": 1.46,
+          "user_s": 2.83,
+          "sys_s": 0.07,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 1.43,
+          "user_s": 2.78,
+          "sys_s": 0.06,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.44,
+          "user_s": 2.8,
+          "sys_s": 0.05,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.44,
+          "user_s": 2.81,
+          "sys_s": 0.04,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.44,
+          "user_s": 2.78,
+          "sys_s": 0.08,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 1.43,
+          "user_s": 2.74,
+          "sys_s": 0.03,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.46,
+          "user_s": 2.84,
+          "sys_s": 0.04,
+          "rss_kib": 5792.0
+        }
+      ],
+      "failures": [],
+      "median_s": 1.44,
+      "median_rss_kib": 5792.0
+    },
+    {
+      "compiler": "iyi",
+      "mode": "builder",
+      "workload": "text",
+      "binary": "/tmp/ris-slang-bench/iyi-builder/text-bin",
+      "build_s": null,
+      "source_sha256": "497961d82d01cc3f12ba8b14171bfd507a6d4ad5a1cc23065f90e0752cb127d7",
+      "runs": [
+        {
+          "wall_s": 0.15,
+          "user_s": 0.24,
+          "sys_s": 0.0,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.15,
+          "user_s": 0.24,
+          "sys_s": 0.01,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.15,
+          "user_s": 0.25,
+          "sys_s": 0.0,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.15,
+          "user_s": 0.25,
+          "sys_s": 0.01,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.15,
+          "user_s": 0.24,
+          "sys_s": 0.0,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.15,
+          "user_s": 0.24,
+          "sys_s": 0.0,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.15,
+          "user_s": 0.25,
+          "sys_s": 0.0,
+          "rss_kib": 5792.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.15,
+      "median_rss_kib": 5792.0
+    },
+    {
+      "compiler": "iyi",
+      "mode": "builder",
+      "workload": "attributes",
+      "binary": "/tmp/ris-slang-bench/iyi-builder/attributes-bin",
+      "build_s": null,
+      "source_sha256": "8db106b9f68f64db6d5aebfee6ff72fecd5014d49c70c11ca61192f12671786f",
+      "runs": [
+        {
+          "wall_s": 1.12,
+          "user_s": 2.19,
+          "sys_s": 0.04,
+          "rss_kib": 5664.0
+        },
+        {
+          "wall_s": 1.13,
+          "user_s": 2.18,
+          "sys_s": 0.04,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.13,
+          "user_s": 2.2,
+          "sys_s": 0.05,
+          "rss_kib": 5664.0
+        },
+        {
+          "wall_s": 1.15,
+          "user_s": 2.26,
+          "sys_s": 0.02,
+          "rss_kib": 5788.0
+        },
+        {
+          "wall_s": 1.11,
+          "user_s": 2.2,
+          "sys_s": 0.04,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.13,
+          "user_s": 2.21,
+          "sys_s": 0.05,
+          "rss_kib": 5700.0
+        },
+        {
+          "wall_s": 1.13,
+          "user_s": 2.24,
+          "sys_s": 0.04,
+          "rss_kib": 5792.0
+        }
+      ],
+      "failures": [],
+      "median_s": 1.13,
+      "median_rss_kib": 5788.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "builder",
+      "workload": "text",
+      "binary": "/tmp/ris-slang-bench/ris-builder/text-bin",
+      "build_s": null,
+      "source_sha256": "497961d82d01cc3f12ba8b14171bfd507a6d4ad5a1cc23065f90e0752cb127d7",
+      "runs": [
+        {
+          "wall_s": 0.13,
+          "user_s": 0.23,
+          "sys_s": 0.01,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.13,
+          "user_s": 0.23,
+          "sys_s": 0.0,
+          "rss_kib": 5700.0
+        },
+        {
+          "wall_s": 0.13,
+          "user_s": 0.23,
+          "sys_s": 0.0,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.14,
+          "user_s": 0.23,
+          "sys_s": 0.01,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.13,
+          "user_s": 0.23,
+          "sys_s": 0.0,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 0.13,
+          "user_s": 0.22,
+          "sys_s": 0.01,
+          "rss_kib": 5920.0
+        },
+        {
+          "wall_s": 0.13,
+          "user_s": 0.23,
+          "sys_s": 0.0,
+          "rss_kib": 5792.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.13,
+      "median_rss_kib": 5792.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "builder",
+      "workload": "attributes",
+      "binary": "/tmp/ris-slang-bench/ris-builder/attributes-bin",
+      "build_s": null,
+      "source_sha256": "8db106b9f68f64db6d5aebfee6ff72fecd5014d49c70c11ca61192f12671786f",
+      "runs": [
+        {
+          "wall_s": 1.03,
+          "user_s": 2.13,
+          "sys_s": 0.04,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.04,
+          "user_s": 2.14,
+          "sys_s": 0.04,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.04,
+          "user_s": 2.14,
+          "sys_s": 0.03,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.04,
+          "user_s": 2.13,
+          "sys_s": 0.04,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.04,
+          "user_s": 2.16,
+          "sys_s": 0.02,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.06,
+          "user_s": 2.14,
+          "sys_s": 0.03,
+          "rss_kib": 5792.0
+        },
+        {
+          "wall_s": 1.05,
+          "user_s": 2.09,
+          "sys_s": 0.04,
+          "rss_kib": 5792.0
+        }
+      ],
+      "failures": [],
+      "median_s": 1.04,
+      "median_rss_kib": 5792.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "tape-copy",
+      "workload": "text",
+      "binary": "/tmp/ris-slang-bench/ris-tape-copy/text-bin",
+      "build_s": null,
+      "source_sha256": "7d9f60ed4f0e89457a4ecf024bf2d752657fba80970e2d456cb5fc9fb2aa5f21",
+      "runs": [
+        {
+          "wall_s": 0.12,
+          "user_s": 0.18,
+          "sys_s": 0.0,
+          "rss_kib": 7328.0
+        },
+        {
+          "wall_s": 0.12,
+          "user_s": 0.18,
+          "sys_s": 0.0,
+          "rss_kib": 7452.0
+        },
+        {
+          "wall_s": 0.12,
+          "user_s": 0.18,
+          "sys_s": 0.01,
+          "rss_kib": 7328.0
+        },
+        {
+          "wall_s": 0.11,
+          "user_s": 0.18,
+          "sys_s": 0.0,
+          "rss_kib": 7328.0
+        },
+        {
+          "wall_s": 0.11,
+          "user_s": 0.18,
+          "sys_s": 0.0,
+          "rss_kib": 7328.0
+        },
+        {
+          "wall_s": 0.12,
+          "user_s": 0.18,
+          "sys_s": 0.0,
+          "rss_kib": 7328.0
+        },
+        {
+          "wall_s": 0.12,
+          "user_s": 0.18,
+          "sys_s": 0.0,
+          "rss_kib": 7456.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.12,
+      "median_rss_kib": 7328.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "tape-copy",
+      "workload": "attributes",
+      "binary": "/tmp/ris-slang-bench/ris-tape-copy/attributes-bin",
+      "build_s": null,
+      "source_sha256": "65ff33217b1dfe1b66d7d3519ea803d585e154e6a6b2ebf56c9e28dba7e5fb01",
+      "runs": [
+        {
+          "wall_s": 1.01,
+          "user_s": 1.94,
+          "sys_s": 0.03,
+          "rss_kib": 7072.0
+        },
+        {
+          "wall_s": 1.03,
+          "user_s": 1.97,
+          "sys_s": 0.02,
+          "rss_kib": 7328.0
+        },
+        {
+          "wall_s": 1.01,
+          "user_s": 1.95,
+          "sys_s": 0.02,
+          "rss_kib": 7328.0
+        },
+        {
+          "wall_s": 1.0,
+          "user_s": 1.93,
+          "sys_s": 0.02,
+          "rss_kib": 7200.0
+        },
+        {
+          "wall_s": 1.03,
+          "user_s": 1.95,
+          "sys_s": 0.03,
+          "rss_kib": 6980.0
+        },
+        {
+          "wall_s": 1.02,
+          "user_s": 1.94,
+          "sys_s": 0.02,
+          "rss_kib": 7200.0
+        },
+        {
+          "wall_s": 1.03,
+          "user_s": 1.9,
+          "sys_s": 0.02,
+          "rss_kib": 7200.0
+        }
+      ],
+      "failures": [],
+      "median_s": 1.02,
+      "median_rss_kib": 7200.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "tape-consume",
+      "workload": "text",
+      "binary": "/tmp/ris-slang-bench/ris-tape-consume/text-bin",
+      "build_s": null,
+      "source_sha256": "31837cd9fdde7f9ff5de7ae08464e35db0a6befa1a48f555eaa2391eaf114f81",
+      "runs": [
+        {
+          "wall_s": 0.11,
+          "user_s": 0.16,
+          "sys_s": 0.01,
+          "rss_kib": 8240.0
+        },
+        {
+          "wall_s": 0.12,
+          "user_s": 0.16,
+          "sys_s": 0.0,
+          "rss_kib": 7840.0
+        },
+        {
+          "wall_s": 0.11,
+          "user_s": 0.16,
+          "sys_s": 0.0,
+          "rss_kib": 8224.0
+        },
+        {
+          "wall_s": 0.11,
+          "user_s": 0.17,
+          "sys_s": 0.0,
+          "rss_kib": 8096.0
+        },
+        {
+          "wall_s": 0.11,
+          "user_s": 0.16,
+          "sys_s": 0.01,
+          "rss_kib": 8224.0
+        },
+        {
+          "wall_s": 0.11,
+          "user_s": 0.15,
+          "sys_s": 0.0,
+          "rss_kib": 8224.0
+        },
+        {
+          "wall_s": 0.11,
+          "user_s": 0.16,
+          "sys_s": 0.0,
+          "rss_kib": 8096.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.11,
+      "median_rss_kib": 8224.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "tape-consume",
+      "workload": "attributes",
+      "binary": "/tmp/ris-slang-bench/ris-tape-consume/attributes-bin",
+      "build_s": null,
+      "source_sha256": "1c822d95f8ee6eae6085261d3169a7208afc3883dc85a149ad5607a0ac4b9dbb",
+      "runs": [
+        {
+          "wall_s": 0.96,
+          "user_s": 1.75,
+          "sys_s": 0.02,
+          "rss_kib": 7584.0
+        },
+        {
+          "wall_s": 0.99,
+          "user_s": 1.75,
+          "sys_s": 0.03,
+          "rss_kib": 7456.0
+        },
+        {
+          "wall_s": 0.97,
+          "user_s": 1.76,
+          "sys_s": 0.02,
+          "rss_kib": 7584.0
+        },
+        {
+          "wall_s": 0.97,
+          "user_s": 1.8,
+          "sys_s": 0.02,
+          "rss_kib": 7584.0
+        },
+        {
+          "wall_s": 0.98,
+          "user_s": 1.8,
+          "sys_s": 0.02,
+          "rss_kib": 7584.0
+        },
+        {
+          "wall_s": 0.98,
+          "user_s": 1.78,
+          "sys_s": 0.01,
+          "rss_kib": 7456.0
+        },
+        {
+          "wall_s": 0.97,
+          "user_s": 1.77,
+          "sys_s": 0.01,
+          "rss_kib": 7452.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.97,
+      "median_rss_kib": 7584.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "tape-stream-copy",
+      "workload": "text",
+      "binary": "/tmp/ris-slang-bench/ris-tape-stream-copy/text-bin",
+      "build_s": null,
+      "source_sha256": "b82b928219145353e24234e5834007e8829b984cdfcd9a4701b9606b8e976cde",
+      "runs": [
+        {
+          "wall_s": 0.08,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6560.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6432.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6560.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6432.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6432.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.1,
+          "sys_s": 0.0,
+          "rss_kib": 6560.0
+        },
+        {
+          "wall_s": 0.08,
+          "user_s": 0.09,
+          "sys_s": 0.0,
+          "rss_kib": 6560.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.08,
+      "median_rss_kib": 6560.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "tape-stream-copy",
+      "workload": "attributes",
+      "binary": "/tmp/ris-slang-bench/ris-tape-stream-copy/attributes-bin",
+      "build_s": null,
+      "source_sha256": "b2cf617e0d3ded76ca5bea3293f0d0491003f3a32fa2dba896365f5947d0a51f",
+      "runs": [
+        {
+          "wall_s": 0.75,
+          "user_s": 1.33,
+          "sys_s": 0.01,
+          "rss_kib": 7072.0
+        },
+        {
+          "wall_s": 0.75,
+          "user_s": 1.32,
+          "sys_s": 0.02,
+          "rss_kib": 6944.0
+        },
+        {
+          "wall_s": 0.75,
+          "user_s": 1.31,
+          "sys_s": 0.03,
+          "rss_kib": 6944.0
+        },
+        {
+          "wall_s": 0.75,
+          "user_s": 1.32,
+          "sys_s": 0.02,
+          "rss_kib": 7072.0
+        },
+        {
+          "wall_s": 0.75,
+          "user_s": 1.31,
+          "sys_s": 0.01,
+          "rss_kib": 6944.0
+        },
+        {
+          "wall_s": 0.76,
+          "user_s": 1.29,
+          "sys_s": 0.04,
+          "rss_kib": 7072.0
+        },
+        {
+          "wall_s": 0.75,
+          "user_s": 1.3,
+          "sys_s": 0.01,
+          "rss_kib": 6944.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.75,
+      "median_rss_kib": 6944.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "tape-stream-consume",
+      "workload": "text",
+      "binary": "/tmp/ris-slang-bench/ris-tape-stream-consume/text-bin",
+      "build_s": null,
+      "source_sha256": "8447ef22799018742dd4b2b17d9ed4cfaa4288c1901a9e29a50aeef3bc6df0dc",
+      "runs": [
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1564.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1568.0
+        },
+        {
+          "wall_s": 0.07,
+          "user_s": 0.07,
+          "sys_s": 0.0,
+          "rss_kib": 1564.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.07,
+      "median_rss_kib": 1568.0
+    },
+    {
+      "compiler": "ris",
+      "mode": "tape-stream-consume",
+      "workload": "attributes",
+      "binary": "/tmp/ris-slang-bench/ris-tape-stream-consume/attributes-bin",
+      "build_s": null,
+      "source_sha256": "51d41d3c8305c2907f76260582b28758c5a6946edce72a8f32ef56ad78378163",
+      "runs": [
+        {
+          "wall_s": 0.72,
+          "user_s": 1.2,
+          "sys_s": 0.01,
+          "rss_kib": 7328.0
+        },
+        {
+          "wall_s": 0.75,
+          "user_s": 1.22,
+          "sys_s": 0.01,
+          "rss_kib": 7328.0
+        },
+        {
+          "wall_s": 0.72,
+          "user_s": 1.2,
+          "sys_s": 0.01,
+          "rss_kib": 7072.0
+        },
+        {
+          "wall_s": 0.72,
+          "user_s": 1.18,
+          "sys_s": 0.03,
+          "rss_kib": 7328.0
+        },
+        {
+          "wall_s": 0.72,
+          "user_s": 1.19,
+          "sys_s": 0.01,
+          "rss_kib": 7328.0
+        },
+        {
+          "wall_s": 0.74,
+          "user_s": 1.19,
+          "sys_s": 0.02,
+          "rss_kib": 7200.0
+        },
+        {
+          "wall_s": 0.73,
+          "user_s": 1.19,
+          "sys_s": 0.01,
+          "rss_kib": 7328.0
+        }
+      ],
+      "failures": [],
+      "median_s": 0.72,
+      "median_rss_kib": 7328.0
+    }
+  ]
+}

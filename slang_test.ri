@@ -7,13 +7,29 @@ module slang_test
 
 import slang::{Slang}
 
+# Test default tape rendering and, with -Dslang_string, retained String output.
+# Separate executions preserve the single evaluation of fixture side effects.
+macro checked_render(filename)
+  {% if flag?(:slang_string) %}
+    ::Slang::Slang.render_string({{filename}})
+  {% else %}
+    begin
+      %actual = ""
+      Tape.scope do
+        %actual = ::Slang::Slang.render({{filename}}, 1).to_s
+      end
+      %actual
+    end
+  {% end %}
+end
+
 class Form
   def text_input(name)
     "<input type=\"text\" name=\"#{name.to_s}\" \\>"
   end
 end
 
-def form_for
+def form_for(&)
   form = Form.new
   String.build do |io|
     io << "<form>"
@@ -40,211 +56,211 @@ end
 
 def basic
   pid = 4242
-  Slang.render("spec/basic.slang")
+  checked_render("spec/basic.slang")
 end
 
 def utf8
-  Slang.render("spec/utf8.slang")
+  checked_render("spec/utf8.slang")
 end
 
 def edge_control
   prefix = "my"
-  Slang.render("spec/edge-control.slang")
+  checked_render("spec/edge-control.slang")
 end
 
 def edge_control_escaped
   prefix = "my"
-  Slang.render("spec/edge-control-escaped.slang")
+  checked_render("spec/edge-control-escaped.slang")
 end
 
 def edge_output
   var = "x"
-  Slang.render("spec/edge-output.slang")
+  checked_render("spec/edge-output.slang")
 end
 
 def edge_output_escaped
   var = "x"
-  Slang.render("spec/edge-output-escaped.slang")
+  checked_render("spec/edge-output-escaped.slang")
 end
 
 def attr_string
-  Slang.render("spec/attr-string.slang")
+  checked_render("spec/attr-string.slang")
 end
 
 def attr_string_spaces
-  Slang.render("spec/attr-string-spaces.slang")
+  checked_render("spec/attr-string-spaces.slang")
 end
 
 def attr_dynamic_class
   klass = "my-class"
-  Slang.render("spec/attr-dynamic-class.slang")
+  checked_render("spec/attr-dynamic-class.slang")
 end
 
 def attr_call
-  Slang.render("spec/attr-call.slang")
+  checked_render("spec/attr-call.slang")
 end
 
 def attr_parentheses
-  Slang.render("spec/attr-parentheses.slang")
+  checked_render("spec/attr-parentheses.slang")
 end
 
 def attr_once
   klass = ""
   type = ""
-  Slang.render("spec/attr-once.slang")
+  checked_render("spec/attr-once.slang")
 end
 
 def attr_join_class
-  Slang.render("spec/attr-join-class.slang")
+  checked_render("spec/attr-join-class.slang")
 end
 
 def attr_join_splat
   attrs = {"class" => "bar", "id" => "baz"}
-  Slang.render("spec/attr-join-splat.slang")
+  checked_render("spec/attr-join-splat.slang")
 end
 
 def attr_blank_class
-  Slang.render("spec/attr-blank-class.slang")
+  checked_render("spec/attr-blank-class.slang")
 end
 
 def attr_escape(val : String)
-  Slang.render("spec/attr-escape.slang")
+  checked_render("spec/attr-escape.slang")
 end
 
 def interpolation_attr
   person = {"name" => "cris"}
-  Slang.render("spec/interpolation-attr.slang")
+  checked_render("spec/interpolation-attr.slang")
 end
 
 def attr_equals
-  Slang.render("spec/attr-equals.slang")
+  checked_render("spec/attr-equals.slang")
 end
 
 def attr_splat
   attrs = {"class" => "foo", "id" => "bar"}
-  Slang.render("spec/attr-splat.slang")
+  checked_render("spec/attr-splat.slang")
 end
 
 def output
-  Slang.render("spec/output.slang")
+  checked_render("spec/output.slang")
 end
 
 def output_escape
-  Slang.render("spec/output-escape.slang")
+  checked_render("spec/output-escape.slang")
 end
 
 def output_raw
-  Slang.render("spec/output-raw.slang")
+  checked_render("spec/output-raw.slang")
 end
 
 def html_inline
-  Slang.render("spec/html-inline.slang")
+  checked_render("spec/html-inline.slang")
 end
 
 def html_nested
-  Slang.render("spec/html-nested.slang")
+  checked_render("spec/html-nested.slang")
 end
 
 def text_inline
-  Slang.render("spec/text-inline.slang")
+  checked_render("spec/text-inline.slang")
 end
 
 def text_nested
-  Slang.render("spec/text-nested.slang")
+  checked_render("spec/text-nested.slang")
 end
 
 def text_quotes
-  Slang.render("spec/text-quotes.slang")
+  checked_render("spec/text-quotes.slang")
 end
 
 def nest_text
-  Slang.render("spec/nest-text.slang")
+  checked_render("spec/nest-text.slang")
 end
 
 def nest_comment
-  Slang.render("spec/nest-comment.slang")
+  checked_render("spec/nest-comment.slang")
 end
 
 def nest_elements
-  Slang.render("spec/nest-elements.slang")
+  checked_render("spec/nest-elements.slang")
 end
 
 def nest_multiline
-  Slang.render("spec/nest-multiline.slang")
+  checked_render("spec/nest-multiline.slang")
 end
 
 def raw_html
   pid = 4242
-  Slang.render("spec/raw-html.slang")
+  checked_render("spec/raw-html.slang")
 end
 
 def if_elsif_else
-  Slang.render("spec/if-elsif-else.slang")
+  checked_render("spec/if-elsif-else.slang")
 end
 
 def case_in
-  Slang.render("spec/case-in.slang")
+  checked_render("spec/case-in.slang")
 end
 
 def case_when
-  Slang.render("spec/case-when.slang")
+  checked_render("spec/case-when.slang")
 end
 
 def double_quotes
-  Slang.render("spec/double-quotes.slang")
+  checked_render("spec/double-quotes.slang")
 end
 
 def svg
-  Slang.render("spec/svg.slang")
+  checked_render("spec/svg.slang")
 end
 
 def script
-  Slang.render("spec/script.slang")
+  checked_render("spec/script.slang")
 end
 
 def style
-  Slang.render("spec/style.slang")
+  checked_render("spec/style.slang")
 end
 
 def blocks
-  Slang.render("spec/blocks.slang")
+  checked_render("spec/blocks.slang")
 end
 
 def form_helper
-  Slang.render("spec/form-helper.slang")
+  checked_render("spec/form-helper.slang")
 end
 
 def boolean_attributes
-  Slang.render("spec/boolean-attributes.slang")
+  checked_render("spec/boolean-attributes.slang")
 end
 
 def attribute_wrappers
   pid = 4242
-  Slang.render("spec/attribute-wrappers.slang")
+  checked_render("spec/attribute-wrappers.slang")
 end
 
 def inline_tags
-  Slang.render("spec/inline-tags.slang")
+  checked_render("spec/inline-tags.slang")
 end
 
 def whitespace
-  Slang.render("spec/whitespace.slang")
+  checked_render("spec/whitespace.slang")
 end
 
 def multiline
-  Slang.render("spec/multiline.slang")
+  checked_render("spec/multiline.slang")
 end
 
 def crystal
-  Slang.render("spec/crystal.slang")
+  checked_render("spec/crystal.slang")
 end
 
 def wrapper_then_attribute
-  Slang.render("spec/wrapper-then-attribute.slang")
+  checked_render("spec/wrapper-then-attribute.slang")
 end
 
 def output_whitespace
-  Slang.render("spec/output-whitespace.slang")
+  checked_render("spec/output-whitespace.slang")
 end
 
 def f(value)
@@ -254,16 +270,20 @@ end
 def attr_operators
   a = "1"
   b = "2"
-  Slang.render("spec/attr-operators.slang")
+  checked_render("spec/attr-operators.slang")
 end
 
 def output_no_space
   name = "<b>"
-  Slang.render("spec/output-no-space.slang")
+  checked_render("spec/output-no-space.slang")
 end
 
 def iyi_code
-  Slang.render("spec/iyi-code.slang")
+  checked_render("spec/iyi-code.slang")
+end
+
+def ris_code
+  checked_render("spec/ris-code.slang")
 end
 
 same = "<div><span>this guy is nested</span><span>deeply nested</span><span>true is just true man</span></div>"
@@ -323,6 +343,7 @@ cases = [
   {"attributes after a wrapper", wrapper_then_attribute, "<a href=\"x\">Link</a><b title=\"y\">Bold</b>"},
   {"=< and => whitespace", output_whitespace, "<p>x yz </p>"},
   {"output without a space before =", output_no_space, "<p>&lt;b&gt;</p><p><b></p><p id=\"x\" class=\"lead\">&lt;b&gt;</p><a href=\"/x\">&lt;b&gt;</a><b>&lt;b&gt;</b> "},
+  {"ris: code", ris_code, "<p class=\"aa bb\"></p>"},
   {"iyi: code", iyi_code, "<p class=\"aa bb\"></p>"},
   {"operators in attributes", attr_operators, "<li class=\"y\" data-x data-f>T</li>"},
 ]

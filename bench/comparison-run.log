@@ -1,0 +1,42 @@
+built iyi render text
+built iyi render attributes
+built ris render text
+built ris render attributes
+built iyi builder text
+built iyi builder attributes
+built ris builder text
+built ris builder attributes
+built ris tape-copy text
+built ris tape-copy attributes
+built ris tape-consume text
+built ris tape-consume attributes
+built iyi optimized-render text
+built iyi optimized-render attributes
+built iyi optimized-builder text
+built iyi optimized-builder attributes
+round 0 complete
+round 1 complete
+round 2 complete
+round 3 complete
+FAILED iyi optimized-builder attributes 139
+round 4 complete
+round 5 complete
+round 6 complete
+round 7 complete
+text iyi render 0.27 5920.0
+attributes iyi render 1.63 5920.0
+text ris render 0.09 6304.0
+attributes ris render 0.53 4640.0
+text iyi builder 0.15 5792.0
+attributes iyi builder 1.16 5792.0
+text ris builder 0.09 5024.0
+attributes ris builder 0.51 4512.0
+text ris tape-copy 0.08 6432.0
+attributes ris tape-copy 0.48 6176.0
+text ris tape-consume 0.07 1568.0
+attributes ris tape-consume 0.44 1568.0
+text iyi optimized-render 0.1 6428.0
+attributes iyi optimized-render 0.58 4640.0
+text iyi optimized-builder 0.1 5024.0
+attributes iyi optimized-builder 0.575 4512.0
+results: /tmp/slang-iyi-ris-comparison/results.json
