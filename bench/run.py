@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Compile identical Slang workloads, verify bytes, measure shuffled rounds."""
-import argparse, hashlib, json, os, platform, random, statistics, subprocess, time
+import argparse, hashlib, json, os, platform, random, shutil, statistics, subprocess, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -71,6 +71,7 @@ def heap_only_runtime(source):
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument('--include-crystal', action='store_true', help='Include unchanged Crystal Slang 2.0.3 from archive/crystal')
     ap.add_argument('--include-iyi-optimized', action='store_true', help='Also compile the same optimized heap implementation with iyi')
     ap.add_argument('--skip-build', action='store_true', help='Reuse binaries from an unchanged previous build')
     ap.add_argument('--iterations', type=int, default=200000)
@@ -80,28 +81,37 @@ def main():
     if a.iterations < 1 or a.rounds < 1:
         ap.error('iterations and rounds must be positive')
     build = a.build_dir.resolve(); build.mkdir(parents=True, exist_ok=True)
-    env = dict(os.environ, IYI_CACHE_DIR=str(build/'cache'))
+    env = dict(os.environ, IYI_CACHE_DIR=str(build/'cache'), CRYSTAL_CACHE_DIR=str(build/'crystal-cache'))
     rows = []
     modes = [('iyi','render'), ('iyi','builder'), ('ris','render'), ('ris','render_string'), ('ris','builder')]
     if a.include_iyi_optimized:
         modes += [('iyi','optimized-render'), ('iyi','optimized-builder')]
+    if a.include_crystal:
+        modes.append(('crystal', 'original'))
     for compiler, mode in modes:
         folder = build/f'{compiler}-{mode}'; folder.mkdir(exist_ok=True)
-        ext = '.iyi' if compiler == 'iyi' else '.ri'
-        optimized_iyi = mode.startswith('optimized-')
-        src = ROOT if optimized_iyi or compiler == 'ris' else IYI
-        source_ext = '.ri' if optimized_iyi or compiler == 'ris' else '.iyi'
-        for rel in ['slang'+ext, 'slang/process'+ext, 'iyi.mod']:
-            dest=folder/rel; dest.parent.mkdir(exist_ok=True)
-            original = src/(rel.replace(ext, source_ext) if rel.endswith(ext) else rel)
-            content = original.read_text()
-            if optimized_iyi and rel == 'slang'+ext:
-                content = heap_only_runtime(content)
-            dest.write_text(content)
+        if compiler == 'crystal':
+            ext = '.cr'
+            library = folder/'lib/slang'
+            shutil.copytree(ROOT/'archive/crystal', library, dirs_exist_ok=True)
+            dependencies = sorted((library/'src').rglob('*.cr'))
+        else:
+            ext = '.iyi' if compiler == 'iyi' else '.ri'
+            optimized_iyi = mode.startswith('optimized-')
+            src = ROOT if optimized_iyi or compiler == 'ris' else IYI
+            source_ext = '.ri' if optimized_iyi or compiler == 'ris' else '.iyi'
+            for rel in ['slang'+ext, 'slang/process'+ext, 'iyi.mod']:
+                dest=folder/rel; dest.parent.mkdir(exist_ok=True)
+                original = src/(rel.replace(ext, source_ext) if rel.endswith(ext) else rel)
+                content = original.read_text()
+                if optimized_iyi and rel == 'slang'+ext:
+                    content = heap_only_runtime(content)
+                dest.write_text(content)
+            dependencies = [folder/('slang'+ext),folder/('slang/process'+ext)]
         for workload, template in TEMPLATES.items():
             (folder/(workload+'.slang')).write_text(template)
             body = 'html = Slang.render("'+workload+'.slang")\n    ptr = html.to_unsafe\n    size = html.bytesize'
-            if mode.endswith('builder'):
+            if compiler == 'crystal' or mode.endswith('builder'):
                 body = 'html = String.build do |buf|\n      Slang.embed("'+workload+'.slang", buf)\n    end\n    ptr = html.to_unsafe\n    size = html.bytesize'
             elif mode == 'render_string':
                 body = 'html = Slang.render_string("'+workload+'.slang")\n    ptr = html.to_unsafe\n    size = html.bytesize'
@@ -112,9 +122,7 @@ def main():
       checksum = (checksum ^ ptr[k].to_u64) &* 1099511628211_u64
       k += 1
     end'''
-            code = '''module benchmark
-import slang::{Slang}
-title = "Tere <maailm> & café"
+            code = ('require "slang"\n' if compiler == 'crystal' else 'module benchmark\nimport slang::{Slang}\n')+'''title = "Tere <maailm> & café"
 items = ["one", "two & three", "<four>", "viis", "kuus", "seitse", "kaheksa", "üheksa"]
 css = "active & selected"
 checksum = 14695981039346656037_u64
@@ -130,12 +138,12 @@ puts "#{bytes} #{checksum}"
             start=time.perf_counter()
             if a.skip_build:
                 manifest = folder/(workload+'-manifest.json')
-                current = {str(f.relative_to(folder)):hashlib.sha256(f.read_bytes()).hexdigest() for f in [source,folder/('slang'+ext),folder/('slang/process'+ext)]}
+                current = {str(f.relative_to(folder)):hashlib.sha256(f.read_bytes()).hexdigest() for f in [source,*dependencies]}
                 if not manifest.exists() or json.loads(manifest.read_text()) != current:
                     raise RuntimeError('Cannot reuse a binary built from different sources: '+str(binary))
             if not a.skip_build:
                 subprocess.run([compiler,'build','--release',str(source),'-o',str(binary)],cwd=folder,env=env,check=True)
-            manifest = {str(f.relative_to(folder)):hashlib.sha256(f.read_bytes()).hexdigest() for f in [source,folder/('slang'+ext),folder/('slang/process'+ext)]}
+            manifest = {str(f.relative_to(folder)):hashlib.sha256(f.read_bytes()).hexdigest() for f in [source,*dependencies]}
             (folder/(workload+'-manifest.json')).write_text(json.dumps(manifest,indent=2)+'\n')
             row={'compiler':compiler,'mode':mode,'workload':workload,'binary':str(binary),'build_s':None if a.skip_build else time.perf_counter()-start,'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'module_sources_sha256':manifest,'binary_sha256':hashlib.sha256(binary.read_bytes()).hexdigest(),'runs':[],'failures':[]}
             rows.append(row)
@@ -162,7 +170,7 @@ puts "#{bytes} #{checksum}"
     for row in rows:
         row['median_s']=statistics.median(r['wall_s'] for r in row['runs']) if row['runs'] else None
         row['median_rss_kib']=statistics.median(r['rss_kib'] for r in row['runs']) if row['runs'] else None
-    result={'platform':platform.platform(),'cpu':next((line.split(':',1)[1].strip() for line in Path('/proc/cpuinfo').read_text().splitlines() if line.startswith('model name')), 'unknown'),'iterations':a.iterations,'rounds':a.rounds,'outputs':expected,'versions':{c:subprocess.check_output([c,'version'],text=True).strip() for c in ['iyi','ris']},'rows':rows}
+    result={'platform':platform.platform(),'cpu':next((line.split(':',1)[1].strip() for line in Path('/proc/cpuinfo').read_text().splitlines() if line.startswith('model name')), 'unknown'),'iterations':a.iterations,'rounds':a.rounds,'outputs':expected,'versions':{c:subprocess.check_output([c,'--version' if c == 'crystal' else 'version'],text=True).strip() for c in sorted({row['compiler'] for row in rows})},'rows':rows}
     (build/'results.json').write_text(json.dumps(result,indent=2)+'\n')
     for row in rows:
         print(row['workload'],row['compiler'],row['mode'],row['median_s'],row['median_rss_kib'])

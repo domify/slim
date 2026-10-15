@@ -44,6 +44,43 @@ compilation time are excluded. Tape scope entry/exit and String copying
 where applicable are included. Default Slang buffer capacity is 256 bytes;
 the explicit String.build control uses the standard default capacity.
 
+## Original Crystal Slang comparison (2026-10-16)
+
+```sh
+python3 bench/run.py --include-crystal --include-iyi-optimized \
+  --build-dir /tmp/slang-crystal-comparison
+```
+
+The Crystal row uses the unmodified Slang 2.0.3 source in archive/crystal,
+copied to a temporary lib/slang directory. All 16 library source files are
+byte-identical to the archive. String.build + Slang.embed matches its test
+helper rendering pattern; no Slang runtime or generator code is patched.
+Compiler: Crystal 1.22.0-dev [22d715b02], LLVM 21.1.8. All rows use --release.
+
+Same prepared inputs, 200,000 pages, one warm-up and seven shuffled measured
+rounds; all 128 executions succeeded with equal output sizes/checksums.
+Timing includes rendering and hashing each byte; compilation, request-model
+construction and network I/O are excluded. Wall time resolution is 0.01 s.
+
+| Implementation | Text median s | Attributes median s | Attributes peak RSS MiB |
+|---|---:|---:|---:|
+| Original Crystal Slang 2.0.3 | 0.29 | 0.72 | 5.09 |
+| Original iyi port | 0.24 | 1.52 | 5.66 |
+| iyi, optimized heap control | 0.09 | 0.53 | 4.53 |
+| ris render_string, owned String | 0.07 | 0.45 | 6.16 |
+| ris render, borrowed tape | 0.07 | 0.43 | 1.53 |
+
+The fair retained-String comparison is Crystal 0.29 / 0.72 s versus ris
+render_string 0.07 / 0.45 s: about 4.1x / 1.6x throughput on these pages.
+Consuming tape bytes before scope exit gives 0.07 / 0.43 s, about 4.1x /
+1.7x Crystal throughput. This compares complete implementations, including
+different standard libraries, generated code and collectors, not tape alone.
+The ris String-returning attribute row has higher RSS (6.16 MiB) than
+Crystal (5.09 MiB); only borrowed tape output drops it to 1.53 MiB.
+
+Full data: [results-crystal.json](results-crystal.json),
+[crystal-run.log](crystal-run.log).
+
 ## Current API results (2026-10-16)
 
 Fresh --release builds; 200,000 renders, one warm-up plus seven shuffled
