@@ -102,7 +102,8 @@ def main():
             source_ext = '.ri' if optimized_iyi or compiler == 'ris' else '.iyi'
             for rel in ['slang'+ext, 'slang/process'+ext, 'iyi.mod']:
                 dest=folder/rel; dest.parent.mkdir(exist_ok=True)
-                original = src/(rel.replace(ext, source_ext) if rel.endswith(ext) else rel)
+                source_rel = rel.replace('slang', 'slim') if src == ROOT else rel
+                original = src/(source_rel.replace(ext, source_ext) if rel.endswith(ext) else source_rel)
                 content = original.read_text()
                 if optimized_iyi and rel == 'slang'+ext:
                     content = heap_only_runtime(content)

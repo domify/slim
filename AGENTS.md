@@ -1,17 +1,17 @@
-# Working on Slang
+# Working on Slim
 
-Slang is a native ris module: Slim-style templates, ported from the
-Crystal shard Slang 2.0.3. To write templates in a project that uses Slang,
-read [TEMPLATES.md](TEMPLATES.md) instead; this page is for changing Slang
+Slim is a native ris module: Slim-style templates, ported from the
+Crystal shard Slang 2.0.3. To write templates in a project that uses Slim,
+read [TEMPLATES.md](TEMPLATES.md) instead; this page is for changing Slim
 itself.
 
 ## Layout
 
-- `slang.ri` is what rendered code needs at run time (`Slang.escape`,
-  `Slang.attribute`, …) and the `render` / `render_string` / `embed` macros.
-- `slang/process.ri` is the lexer, parser and code generation. The macros
+- `slim.ri` is what rendered code needs at run time (`Slim.escape`,
+  `Slim.attribute`, …) and the `render` / `render_string` / `embed` macros.
+- `slim/process.ri` is the lexer, parser and code generation. The macros
   run it at compile time; it prints the ris source that renders a template.
-- `slang_test.ri` runs every template under `spec/` and compares the HTML.
+- `slim_test.ri` runs every template under `spec/` and compares the HTML.
 - `archive/crystal/` is the Crystal original, kept as a reference. Do not
   change it.
 
@@ -36,11 +36,11 @@ all benchmark variants before starting sequential, shuffled measurements.
   renderer or tape/heap aliases.
 
 - A change of behaviour gets a template under `spec/`, a case in
-  `slang_test.ri`, and a line in the README's "Differences from Crystal
+  `slim_test.ri`, and a line in the README's "Differences from Crystal
   Slang 2.0.3" when it departs from the original.
-- Keep the syntax table in the README, the header comment of `slang.ri` and
+- Keep the syntax table in the README, the header comment of `slim.ri` and
   [TEMPLATES.md](TEMPLATES.md) in step with the code.
-- Template errors name the template's line: `raise "slang: … at line
+- Template errors name the template's line: `raise "slim: … at line
   #{@line_number}, column #{@column_number}"`.
 - Follow the original's code closely where nothing needs fixing; it keeps
   the port comparable to `archive/crystal/`.

@@ -1,9 +1,9 @@
-# Slang: Slim-style templates for ris, ported from the Crystal shard
+# Slim: Slim-style templates for ris, ported from the Crystal shard
 # toddsundsted/slang 2.0.3, itself a fork of jeromegn/slang; the Crystal
 # code is kept in archive/crystal/. MIT License, see LICENSE.
 #
-# Like the original, a template becomes code at compile time: `Slang.embed`
-# and `Slang.render` run `slang/process` (slang/process.ri), which parses
+# Like the original, a template becomes code at compile time: `Slim.embed`
+# and `Slim.render` run `slim/process` (slim/process.ri), which parses
 # the template and prints the ris source that renders it. This module is what
 # that source needs at run time. Local variables of the method that renders a
 # template are visible inside it.
@@ -30,7 +30,7 @@
 #   * Raw output is `!=`, as in Haml; `==` stops the template with an
 #     error.
 #   * An attribute whose value is `false` or `nil` is left out and `true`
-#     writes the bare name, through `Slang.attribute`; this includes `id`,
+#     writes the bare name, through `Slim.attribute`; this includes `id`,
 #     and the entries of a `*splat` hash.
 #   * Blank class names are left out of `class`, and an element whose
 #     class names are all blank has no `class`.
@@ -39,11 +39,11 @@
 #     `crystal:`.
 #   * After `a(href="x")`, attributes of later elements no longer stop the
 #     template with "Missing hash key: ')'".
-module slang
+module slim
 
 import std/text
 
-pub struct Slang
+pub struct Slim
   # Owned by the caller's Tape.scope. `finish` borrows its bytes;
   # `to_s` makes an independent String for a retained response body.
   @[OnTape]
@@ -215,14 +215,14 @@ pub struct Slang
 
   # Splices the template at *filename* here; its code writes to *buffer*.
   macro embed(filename, buffer)
-    {{ run("./slang/process", @caller.first.filename || "", filename, buffer.id.stringify) }}
+    {{ run("./slim/process", @caller.first.filename || "", filename, buffer.id.stringify) }}
   end
 
   # The default result is borrowed from the caller's active Tape.scope.
   macro render(filename, capacity = 256)
     begin
-      %buf = ::Slang::Slang::TapeBuffer.new({{capacity}})
-      ::Slang::Slang.embed({{filename}}, %buf)
+      %buf = ::Slim::Slim::TapeBuffer.new({{capacity}})
+      ::Slim::Slim.embed({{filename}}, %buf)
       %buf.finish
     end
   end
@@ -233,7 +233,7 @@ pub struct Slang
     begin
       %result = ""
       ::Tape.local do
-        %result = ::Slang::Slang.render({{filename}}, {{capacity}}).to_s
+        %result = ::Slim::Slim.render({{filename}}, {{capacity}}).to_s
       end
       %result
     end
@@ -241,16 +241,16 @@ pub struct Slang
 end
 
 # The same macros at the module's top level. A program file without a
-# `module` line finds this module's namespace, `::Slang`, before the
-# imported struct, and `Slang.render` lands here.
+# `module` line finds this module's namespace, `::Slim`, before the
+# imported struct, and `Slim.render` lands here.
 pub macro embed(filename, buffer)
-  ::Slang::Slang.embed({{filename}}, {{buffer}})
+  ::Slim::Slim.embed({{filename}}, {{buffer}})
 end
 
 pub macro render(filename, capacity = 256)
-  ::Slang::Slang.render({{filename}}, {{capacity}})
+  ::Slim::Slim.render({{filename}}, {{capacity}})
 end
 
 pub macro render_string(filename, capacity = 256)
-  ::Slang::Slang.render_string({{filename}}, {{capacity}})
+  ::Slim::Slim.render_string({{filename}}, {{capacity}})
 end

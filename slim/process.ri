@@ -1,12 +1,12 @@
-# The program `Slang.embed` runs at compile time: `slang/process CALLER
+# The program `Slim.embed` runs at compile time: `slim/process CALLER
 # TEMPLATE BUFFER` reads the template named beside CALLER (or by an absolute
 # path) and prints the ris source that renders it into BUFFER. The Crystal
-# shard's archive/crystal/src/slang/process.cr did the same for Crystal.
+# shard's archive/crystal/src/slim/process.cr did the same for Crystal.
 #
 # The lexer, the parser and the node tree are toddsundsted/slang 2.0.3's,
 # kept in the same order; templates fail here with their line, and the
 # compiler reports errors in the generated code at the template's line.
-module slang_process
+module slim_process
 
 import std/text
 
@@ -27,7 +27,7 @@ class Token
   # The token's text: code, or a string literal for text.
   property value : String?
 
-  # The value is wrapped in `Slang.escape` when it is rendered.
+  # The value is wrapped in `Slim.escape` when it is rendered.
   property escaped : Bool
 
   # The token is on the same line as the previous token.
@@ -362,7 +362,7 @@ class Lexer
     end
     next_char
     if current_char == '='
-      raise "slang: raw output is `!=`, not `==`, at line #{@line_number}, column #{@column_number - 1}"
+      raise "slim: raw output is `!=`, not `==`, at line #{@line_number}, column #{@column_number - 1}"
     end
     if current_char == '<'
       @token.prepend_whitespace = true
@@ -533,7 +533,7 @@ class Lexer
     c = current_char
     loop do
       if c == '\r'
-        raise "slang expected '\\n' after '\\r' at line #{@line_number}" unless peek_next_char == '\n'
+        raise "slim expected '\\n' after '\\r' at line #{@line_number}" unless peek_next_char == '\n'
         next_char
       elsif c != '\n'
         break
@@ -574,7 +574,7 @@ class Lexer
   end
 
   private def unexpected_char : Nil
-    raise "slang: unexpected char '#{current_char}' at line #{@line_number}, column #{@column_number}"
+    raise "slim: unexpected char '#{current_char}' at line #{@line_number}, column #{@column_number}"
   end
 end
 
@@ -712,29 +712,29 @@ class Node
     w << "#{buffer} << \" \"" if @token.prepend_whitespace
     w << "#{buffer} << \"<#{name}\""
     if id = attributes.find { |attribute| attribute.token.name == "id" }
-      w << "::Slang::Slang.attribute(#{buffer}, \"id\", (#{w.loc(id.token)}#{id.value}))"
+      w << "::Slim::Slim.attribute(#{buffer}, \"id\", (#{w.loc(id.token)}#{id.value}))"
     end
     classes = attributes.select { |attribute| attribute.token.name == "class" }.map { |attribute| "(#{w.loc(attribute.token)}#{attribute.value}).to_s" }
     unless classes.empty? && !splat
       state = w.unique(buffer)
       w << "#{state} = false"
       classes.each do |value|
-        w << "#{state} = ::Slang::Slang.class_part(#{buffer}, #{value}, #{state})"
+        w << "#{state} = ::Slim::Slim.class_part(#{buffer}, #{value}, #{state})"
       end
       if splat
         saved = w.unique(buffer)
         w << "#{saved} = (#{splat})"
         splat = saved
-        w << "#{state} = ::Slang::Slang.class_part(#{buffer}, (#{saved})[\"class\"]?.to_s, #{state})"
+        w << "#{state} = ::Slim::Slim.class_part(#{buffer}, (#{saved})[\"class\"]?.to_s, #{state})"
       end
       w << "#{buffer} << \"\\\"\" if #{state}"
     end
     attributes.each do |attribute|
       attribute_name = attribute.token.name || ""
       next if attribute_name == "id" || attribute_name == "class"
-      w << "::Slang::Slang.attribute(#{buffer}, \"#{attribute_name}\", (#{w.loc(attribute.token)}#{attribute.value}))"
+      w << "::Slim::Slim.attribute(#{buffer}, \"#{attribute_name}\", (#{w.loc(attribute.token)}#{attribute.value}))"
     end
-    w << "::Slang::Slang.splat(#{buffer}, (#{splat}))" if splat
+    w << "::Slim::Slim.splat(#{buffer}, (#{splat}))" if splat
     w << "#{buffer} << \">\""
     @nodes.each { |node| node.to_s(w, buffer) }
     w << "#{buffer} << \"</#{name}>\"" unless SELF_CLOSING_TAGS.includes?(name)
@@ -754,7 +754,7 @@ class Node
     w << "#{buffer} << \" \"" if @token.prepend_whitespace
     w << "#{buffer} << \"\\n\"" if @token.raw_text && !first_child? && !@token.text_block && !empty_parent? && !@token.inline
     w << "#{buffer} << \"#{indentation}\"" if indent? && @token.raw_text
-    open, close = @token.escaped ? {"::Slang::Slang.write_escaped(#{buffer}, (", "))"} : {"::Slang::Slang.write_raw(#{buffer}, (", "))"}
+    open, close = @token.escaped ? {"::Slim::Slim.write_escaped(#{buffer}, (", "))"} : {"::Slim::Slim.write_raw(#{buffer}, (", "))"}
     if @token.type == "OUTPUT" && children?
       # `= expr do` passes the block's HTML to the method as a String.
       sub = w.unique(buffer)
@@ -818,11 +818,11 @@ def parse(text : String) : Node
       document.nodes << Node.new("doctype", document, token)
     elsif type == "ATTRIBUTE"
       element = element_of(current)
-      raise "slang: attribute #{token.name} outside an element at line #{token.line_number}" if element.document?
+      raise "slim: attribute #{token.name} outside an element at line #{token.line_number}" if element.document?
       element.nodes << Node.new("attribute", element, token)
     elsif type == "SPLAT"
       element = element_of(current)
-      raise "slang: *#{token.value} outside an element at line #{token.line_number}" if element.document?
+      raise "slim: *#{token.value} outside an element at line #{token.line_number}" if element.document?
       element.token.splat = token.value
     else
       parent = current
@@ -888,6 +888,6 @@ def locate(template : String, caller : String) : String
 end
 
 args = Program.args
-raise "usage: slang/process CALLER TEMPLATE BUFFER, not #{args.size} arguments" unless args.size == 3
+raise "usage: slim/process CALLER TEMPLATE BUFFER, not #{args.size} arguments" unless args.size == 3
 
 print process_file(locate(args[1], args[0]), args[2])

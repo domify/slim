@@ -1,9 +1,9 @@
 module refused_return
-import slang::{Slang}
+import slim::{Slim}
 
 def invalid : TapeString
   Tape.scope do
-    return Slang.render("../../spec/text-inline.slang")
+    return Slim.render("../../spec/text-inline.slim")
   end
   raise "unreachable"
 end

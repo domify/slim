@@ -1,7 +1,7 @@
-# Slang runtime benchmark
+# Slim runtime benchmark
 
 ```sh
-python3 ~/contribute/ris/slang/bench/run.py
+python3 ~/contribute/ris/slim/bench/run.py
 ```
 
 Current ris API:
@@ -10,14 +10,14 @@ Current ris API:
 - `render_string` renders to tape and copies to an independent String.
 - `builder` is an explicit consumer-supplied String.build sink via embed.
 
-There is no Slang heap Buffer class and no separate heap rendering path.
+There is no Slim heap Buffer class and no separate heap rendering path.
 The unchanged iyi controls still use the original String-returning render.
 
 For an additional generated heap-only algorithm control compiled with iyi:
 
 ```sh
-python3 ~/contribute/ris/slang/bench/run.py --include-iyi-optimized \
-  --build-dir /tmp/slang-tape-first-comparison
+python3 ~/contribute/ris/slim/bench/run.py --include-iyi-optimized \
+  --build-dir /tmp/slim-tape-first-comparison
 ```
 
 That control removes tape-specific types and overloads from benchmark
@@ -26,7 +26,7 @@ The generated control also passes all 53 original iyi HTML fixtures.
 Neither control edits the original iyis/slang module.
 
 Needs iyi, ris, Python 3 and GNU /usr/bin/time. Generated files go in
-/tmp/slang-tape-first-bench unless --build-dir is specified. --skip-build
+/tmp/slim-tape-first-bench unless --build-dir is specified. --skip-build
 requires matching source manifests and an unchanged compiler/prelude.
 
 Defaults: 200,000 renders per execution, one excluded warm-up and seven
@@ -41,20 +41,20 @@ Inputs are prepared once. The text page emits 220 bytes, the attribute page
 All output bytes are hashed with wrapping FNV-1a. Sizes and checksums must
 agree across every implementation. Model construction, network I/O and
 compilation time are excluded. Tape scope entry/exit and String copying
-where applicable are included. Default Slang buffer capacity is 256 bytes;
+where applicable are included. Default Slim buffer capacity is 256 bytes;
 the explicit String.build control uses the standard default capacity.
 
 ## Original Crystal Slang comparison (2026-10-16)
 
 ```sh
 python3 bench/run.py --include-crystal --include-iyi-optimized \
-  --build-dir /tmp/slang-crystal-comparison
+  --build-dir /tmp/slim-crystal-comparison
 ```
 
 The Crystal row uses the unmodified Slang 2.0.3 source in archive/crystal,
-copied to a temporary lib/slang directory. All 16 library source files are
-byte-identical to the archive. String.build + Slang.embed matches its test
-helper rendering pattern; no Slang runtime or generator code is patched.
+copied to a temporary lib/slim directory. All 16 library source files are
+byte-identical to the archive. String.build + Slim.embed matches its test
+helper rendering pattern; no Slim runtime or generator code is patched.
 Compiler: Crystal 1.22.0-dev [22d715b02], LLVM 21.1.8. All rows use --release.
 
 Same prepared inputs, 200,000 pages, one warm-up and seven shuffled measured

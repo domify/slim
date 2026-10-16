@@ -1,1 +1,1 @@
-module github.com/domify/ris-slang
+module github.com/domify/slim

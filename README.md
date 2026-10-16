@@ -1,4 +1,4 @@
-# Slang
+# Slim
 
 Lightweight, terse templates for ris, in the syntax of
 [Slim](https://github.com/slim-template/slim).
@@ -15,12 +15,12 @@ rendered page is ordinary compiled code by the time the program runs.
 
 ## Installation
 
-This local ris port lives in `~/contribute/ris/slang`. Add it to a consuming
+This local ris port lives in `~/contribute/ris/slim`. Add it to a consuming
 project's `iyi.mod` (adjust the relative path):
 
 ```text
-require github.com/domify/ris-slang v0.0.0
-replace github.com/domify/ris-slang => ../ris/slang
+require github.com/domify/slim v0.0.0
+replace github.com/domify/slim => ../ris/slim
 ```
 
 The module retains the original import identity.
@@ -28,10 +28,10 @@ The module retains the original import identity.
 ## Usage
 
 ```ruby
-import github.com/domify/ris-slang::{Slang}
+import github.com/domify/slim::{Slim}
 
 def page(name : String, items : Array(String)) : TapeString
-  Slang.render("views/page.slang")
+  Slim.render("views/page.slim")
 end
 
 Tape.scope do
@@ -40,9 +40,9 @@ Tape.scope do
 end
 ```
 
-`Slang.render(filename, capacity = 256)` returns a `TapeString` owned by the
+`Slim.render(filename, capacity = 256)` returns a `TapeString` owned by the
 caller's active `Tape.scope`. There is one internal renderer and one tape
-buffer; Slang has no heap-buffer renderer. Without a scope, tape allocation
+buffer; Slim has no heap-buffer renderer. Without a scope, tape allocation
 terminates with a diagnostic. The compiler rejects returning or storing the
 tape result beyond its owning scope. Raw pointers remain the caller's
 responsibility.
@@ -51,11 +51,11 @@ For an ordinary retained `String`, use the explicit conversion API:
 
 ```ruby
 def retained_page(name : String, items : Array(String)) : String
-  Slang.render_string("views/page.slang")
+  Slim.render_string("views/page.slim")
 end
 ```
 
-Inside an existing scope, `Slang.render("views/page.slang").to_s` makes the
+Inside an existing scope, `Slim.render("views/page.slim").to_s` makes the
 same retained copy directly. `render_string` is the convenience spelling
 that manages an independent temporary tape.
 
@@ -67,8 +67,8 @@ may be read by the template. Convert other outer tape values to owned data
 before calling `render_string`; the compiler refuses access to them inside
 `Tape.local` to prevent references to temporary storage escaping.
 
-`Slang.embed(filename, io)` writes directly to a supplied writer implementing
-`<<`. This includes `Slang::TapeBuffer.new(capacity)` in a tape scope and an
+`Slim.embed(filename, io)` writes directly to a supplied writer implementing
+`<<`. This includes `Slim::TapeBuffer.new(capacity)` in a tape scope and an
 explicitly supplied `String::Builder`. A tape buffer's `finish` returns a
 borrowed `TapeString`; `to_s` makes a retained String copy. Do not append or
 grow that buffer after taking a view of its bytes.
@@ -91,7 +91,7 @@ semantics and may allocate on the heap.
 
 [TEMPLATES.md](TEMPLATES.md) is a short guide to writing templates, for
 agents and people who know Slim; [AGENTS.md](AGENTS.md) is for working on
-Slang itself.
+Slim itself.
 
 ## Syntax
 
@@ -122,11 +122,11 @@ html lang="en"
       console.log("8 * 3 =", 8 * 3);
 ```
 
-With `title = "Slang"`, `name = "<world>"`, `items = ["one", "two"]` and
+With `title = "Slim"`, `name = "<world>"`, `items = ["one", "two"]` and
 `current = "two"`, this renders as (one line, broken here for reading):
 
 ```html
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Slang</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Slim</title>
 <style>h1 {color: red;}</style></head><body><!--A visible comment-->
 <h1 class="title">Hello, &lt;world&gt;!</h1>
 <p>Text is <em>HTML</em>, and &lt;world&gt; in it is escaped.</p><div><hr></div>
@@ -194,10 +194,10 @@ after a tag or a quoted value, `p= name` and `a href="/"= name` need none.
 ./check.sh
 ```
 
-`slang_test.ri` holds the tests of the Crystal shard's `spec/slang_spec.cr`,
+`slim_test.ri` holds the tests of the Crystal shard's `spec/slang_spec.cr`,
 with their templates under `spec/`, and the port's own additions. The module
-is `slang.ri` (what rendered code needs at run time, and the macros) and
-`slang/process.ri` (the lexer, parser and code generation the macros run at
+is `slim.ri` (what rendered code needs at run time, and the macros) and
+`slim/process.ri` (the lexer, parser and code generation the macros run at
 compile time).
 
 Runtime benchmarks comparing iyi, ris, builder and tape output are in
@@ -205,7 +205,7 @@ Runtime benchmarks comparing iyi, ris, builder and tape output are in
 
 ## Thanks
 
-Slang exists because of the people who wrote and kept it alive:
+Slim exists because of the people who wrote and kept it alive:
 
 - [Jerome Gravel-Niquet](https://github.com/jeromegn) created Slang in 2016
   and maintained it as [jeromegn/slang](https://github.com/jeromegn/slang).

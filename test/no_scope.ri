@@ -1,3 +1,3 @@
 module no_scope
-import slang::{Slang}
-Slang.render("../spec/text-inline.slang")
+import slim::{Slim}
+Slim.render("../spec/text-inline.slim")

@@ -1,17 +1,17 @@
-# Writing Slang templates
+# Writing Slim templates
 
-A guide for agents and people who write `.slang` templates in a ris
-project. Slang looks like Slim, and most of what you know about Slim holds;
-this page lists where Slang differs, and the mistakes that are easy to make.
+A guide for agents and people who write `.slim` templates in a ris
+project. Slim looks like Slim, and most of what you know about Slim holds;
+this page lists where Slim differs, and the mistakes that are easy to make.
 The full syntax table is in the [README](README.md#syntax).
 
 ## Rendering
 
 ```ruby
-import github.com/domify/ris-slang::{Slang}
+import github.com/domify/slim::{Slim}
 
 def page(title : String, items : Array(String)) : TapeString
-  Slang.render("views/page.slang")
+  Slim.render("views/page.slim")
 end
 
 Tape.scope do
@@ -28,7 +28,7 @@ end
 - `Tape.scope` shares an existing tape; `Tape.local` always owns a separate
   tape. A `render_string` template can read outer `TapeString` values; convert
   other outer tape values to owned data before entering the local tape.
-- `Slang.embed` accepts a `Slang::TapeBuffer` or another writer with `<<`.
+- `Slim.embed` accepts a `Slim::TapeBuffer` or another writer with `<<`.
   A tape buffer's `finish` borrows its bytes; do not append after finishing.
 - The template becomes ris code at compile time; diagnostics name the
   template's line. The path is relative to the calling `.ri` source file.
@@ -55,7 +55,7 @@ end
 - Raw output is `!=`, as in Haml. **`==` is an error**, unlike Slim and
   Crystal Slang.
 - Use `!=` only for HTML your own code made; never for user input, unless
-  every value in it went through `Slang.escape` or `HTML.escape`.
+  every value in it went through `Slim.escape` or `HTML.escape`.
 - Output on its own line is `= expr` or `!= expr`.
 
 ## Code

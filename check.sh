@@ -1,22 +1,22 @@
 #!/bin/sh
 set -eu
 cd "$(dirname "$0")"
-export IYI_CACHE_DIR="${IYI_CACHE_DIR:-/tmp/ris-slang-check-cache}"
+export IYI_CACHE_DIR="${IYI_CACHE_DIR:-/tmp/slim-check-cache}"
 RIS="${RIS:-ris}"
 export IYI_PATH="$PWD:$("$RIS" env RIS_PATH)"
 "$RIS" test
-"$RIS" run -Dslang_string slang_test.ri
-scratch=$(mktemp -d /tmp/ris-slang-check.XXXXXX)
+"$RIS" run -Dslim_string slim_test.ri
+scratch=$(mktemp -d /tmp/slim-check.XXXXXX)
 trap 'rm -rf "$scratch"' EXIT HUP INT TERM
 # Seed every exercised specialization before consuming the artifact: a
 # fixture-only producer never reaches the default-capacity constructor.
 cat > "$scratch/producer.ri" <<'RI'
 module producer
-import slang_test
+import slim_test
 import streaming_test
 RI
 "$RIS" build "$scratch/producer.ri" --emit-iyimod "$scratch/modules" -o "$scratch/producer"
-"$RIS" build slang_test.ri --use-iyimod "$scratch/modules" -o "$scratch/tape"
+"$RIS" build slim_test.ri --use-iyimod "$scratch/modules" -o "$scratch/tape"
 "$scratch/tape"
 "$RIS" build streaming_test.ri --use-iyimod "$scratch/modules" -o "$scratch/api"
 "$scratch/api"

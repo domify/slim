@@ -1,5 +1,5 @@
 module streaming_test
-import slang::{Slang}
+import slim::{Slim}
 
 # A consumer implementing only << must still work after direct escaping.
 class Sink
@@ -68,9 +68,9 @@ blank = "　 \t"
 classes = "é & \"test\""
 number = -9223372036854775807_i64 - 1_i64
 expected = "<div><p title=\"&lt;&amp;&gt;&quot;&#39; café Привет\">&lt;&amp;&gt;&quot;&#39; café Привет</p><p><b>raw</b></p><span></span><span class=\"first é &amp; &quot;test&quot;\"></span><span>-9223372036854775808</span></div>"
-check(Slang.render_string("spec/streaming.slang"), expected)
+check(Slim.render_string("spec/streaming.slim"), expected)
 sink = Sink.new
-Slang.embed("spec/streaming.slang", sink)
+Slim.embed("spec/streaming.slim", sink)
 check(sink.to_s, expected)
 
 def tape_page(expected : String) : Nil
@@ -82,7 +82,7 @@ def tape_page(expected : String) : Nil
     # Both escaped and raw tape model values must render without to_s first.
     text = TapeString.build(1) { |writer| writer.append("<&>\"' café Привет") }
     raw = TapeString.build(1) { |writer| writer.append("<b>raw</b>") }
-    page = Slang.render("spec/streaming.slang", 0)
+    page = Slim.render("spec/streaming.slim", 0)
     copy = page.to_s
     check(copy, expected)
   end
@@ -93,12 +93,12 @@ tape_page(expected)
 puts "PASS: streaming escaping, UTF-8, blank classes, custom sink, tape model, zero-capacity growth and retained copy"
 
 COUNTER.reset
-check(Slang.render_string("spec/splat-once.slang"), "<span class=\"first middle last &amp; more\" title=\"x&lt;y\"></span>")
+check(Slim.render_string("spec/splat-once.slim"), "<span class=\"first middle last &amp; more\" title=\"x&lt;y\"></span>")
 check(COUNTER.calls.to_s, "1")
 check(COUNTER.events, "classsplat")
 Tape.scope do
   COUNTER.reset
-  check(Slang.render("spec/splat-once.slang").to_s, "<span class=\"first middle last &amp; more\" title=\"x&lt;y\"></span>")
+  check(Slim.render("spec/splat-once.slim").to_s, "<span class=\"first middle last &amp; more\" title=\"x&lt;y\"></span>")
   check(COUNTER.calls.to_s, "1")
   check(COUNTER.events, "classsplat")
 end
@@ -107,32 +107,32 @@ end
 values = [0_i64, -1_i64, 9223372036854775807_i64, -9223372036854775807_i64 - 1_i64]
 Tape.scope do
   values.each do |value|
-    buffer = Slang::TapeBuffer.new
-    Slang.write_escaped(buffer, value)
+    buffer = Slim::TapeBuffer.new
+    Slim.write_escaped(buffer, value)
     check(buffer.to_s, value.to_s)
   end
-  buffer = Slang::TapeBuffer.new
-  Slang.write_raw(buffer, 18446744073709551615_u64)
+  buffer = Slim::TapeBuffer.new
+  Slim.write_raw(buffer, 18446744073709551615_u64)
   check(buffer.to_s, "18446744073709551615")
 end
 
-check(Slang.escape(text), "&lt;&amp;&gt;&quot;&#39; café Привет")
-check(Slang.escape("plain café"), "plain café")
-check(Slang.escape(""), "")
+check(Slim.escape(text), "&lt;&amp;&gt;&quot;&#39; café Привет")
+check(Slim.escape("plain café"), "plain café")
+check(Slim.escape(""), "")
 
 # render_string opens a scope, returns owned bytes, and leaves no active
 # tape behind. Inside a caller scope it must not release that caller's data.
-check(Slang.render_string("spec/tape-first.slang"), "<p>true</p>")
+check(Slim.render_string("spec/tape-first.slim"), "<p>true</p>")
 raise "render left a tape active" unless IyiRegion.tape == 0_u64
 retained = ""
 Tape.scope do
   sentinel = TapeString.build { |writer| writer.append("still alive") }
-  retained = Slang.render_string("spec/tape-first.slang")
+  retained = Slim.render_string("spec/tape-first.slim")
   check(sentinel.to_s, "still alive")
-  check(Slang.render("spec/tape-first.slang").to_s, retained)
+  check(Slim.render("spec/tape-first.slim").to_s, retained)
 end
 Tape.scope do
-  overwrite = Slang::TapeBuffer.new
+  overwrite = Slim::TapeBuffer.new
   overwrite << "overwrite released storage"
 end
 check(retained, "<p>true</p>")
@@ -140,5 +140,5 @@ raise "nested render left a tape active" unless IyiRegion.tape == 0_u64
 puts "PASS: render uses tape, render_string copies retained output and preserves outer scopes"
 
 Tape.scope do
-  check(Slang.render("spec/tape-first.slang").to_s, "<p>true</p>")
+  check(Slim.render("spec/tape-first.slim").to_s, "<p>true</p>")
 end
