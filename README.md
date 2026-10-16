@@ -16,12 +16,10 @@ rendered page is ordinary compiled code by the time the program runs.
 
 ## Installation
 
-This local ris port lives in `~/contribute/rispacks/slim`. Add it to a consuming
-project's `iyi.mod` (adjust the relative path):
+Add it to a consuming project's `ris.mod`; `ris` fetches the tag from GitHub:
 
 ```text
-require github.com/domify/slim v0.0.0
-replace github.com/domify/slim => ../rispacks/slim
+require github.com/domify/slim v0.1.0
 ```
 
 ## Usage
