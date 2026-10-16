@@ -3,27 +3,26 @@
 Lightweight, terse templates for ris, in the syntax of
 [Slim](https://github.com/slim-template/slim).
 
-Slang started in 2016 as a template language for Crystal. This repository
-is its continuation as a native ris module: the lexer, parser and code
-generation of the last Crystal release (2.0.3) are ported to ris, along with
-its tests. The Crystal code is kept unchanged in
-[`archive/crystal/`](archive/crystal/) and is no longer maintained. The ris
-port is maintained by Priit Tark at [domify](https://github.com/domify).
+This module continues [Slang](https://github.com/toddsundsted/slang), a
+Slim-style template language for Crystal that started in 2016. The lexer,
+parser and code generation of Slang's last release (2.0.3) are ported to ris,
+along with its tests, and the port is named Slim after the syntax it follows.
+The Crystal code is kept unchanged in [`archive/crystal/`](archive/crystal/)
+and is no longer maintained. The ris port is maintained by Priit Tark at
+[domify](https://github.com/domify).
 
 Like the original, a template is turned into ris code at compile time, so a
 rendered page is ordinary compiled code by the time the program runs.
 
 ## Installation
 
-This local ris port lives in `~/contribute/ris/slim`. Add it to a consuming
+This local ris port lives in `~/contribute/rispacks/slim`. Add it to a consuming
 project's `iyi.mod` (adjust the relative path):
 
 ```text
 require github.com/domify/slim v0.0.0
-replace github.com/domify/slim => ../ris/slim
+replace github.com/domify/slim => ../rispacks/slim
 ```
-
-The module retains the original import identity.
 
 ## Usage
 
