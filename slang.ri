@@ -19,7 +19,7 @@
 #         p Hello, #{name}!         / text is HTML; #{} in it is escaped
 #
 # `render` returns TapeString bytes owned by the caller's Tape.scope.
-# `render_string` uses the same tape renderer and copies a retained String.
+# `render_string` uses its own Tape.local and copies a retained String.
 # `embed` accepts TapeBuffer or a user writer. Escaping and class joining
 # stream into the sink; integer output and TapeString values need no temporary String.
 #
@@ -227,12 +227,12 @@ pub struct Slang
     end
   end
 
-  # A retained String, copied before an owned scope ends. Nested scopes
-  # share the caller's tape and must not reclaim its existing allocations.
+  # A retained String, copied before an independent temporary tape ends.
+  # The caller's tape is restored; temporary buffers can be reused now.
   macro render_string(filename, capacity = 256)
     begin
       %result = ""
-      ::Tape.scope do
+      ::Tape.local do
         %result = ::Slang::Slang.render({{filename}}, {{capacity}}).to_s
       end
       %result

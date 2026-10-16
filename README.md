@@ -19,8 +19,8 @@ This local ris port lives in `~/contribute/ris/slang`. Add it to a consuming
 project's `iyi.mod` (adjust the relative path):
 
 ```text
-require github.com/domify/slang v0.0.0
-replace github.com/domify/slang => ../ris/slang
+require github.com/domify/ris-slang v0.0.0
+replace github.com/domify/ris-slang => ../ris/slang
 ```
 
 The module retains the original import identity.
@@ -28,7 +28,7 @@ The module retains the original import identity.
 ## Usage
 
 ```ruby
-import github.com/domify/slang::{Slang}
+import github.com/domify/ris-slang::{Slang}
 
 def page(name : String, items : Array(String)) : TapeString
   Slang.render("views/page.slang")
@@ -57,13 +57,15 @@ end
 
 Inside an existing scope, `Slang.render("views/page.slang").to_s` makes the
 same retained copy directly. `render_string` is the convenience spelling
-that also manages a scope when the caller has none.
+that manages an independent temporary tape.
 
 `render_string(filename, capacity = 256)` uses the same tape renderer and
-copies its output before returning. It opens a scope when none is active.
-Inside an existing scope it shares the caller's tape and reclaims nothing
-until that outer scope ends. Rendering many retained strings in one long
-scope therefore also retains their temporary tape buffers until scope exit.
+copies its output before returning. It always uses `Tape.local`, independently
+of any caller's `Tape.scope`, and releases its temporary buffers immediately.
+The runtime can reuse that memory on the next call. Outer `TapeString` values
+may be read by the template. Convert other outer tape values to owned data
+before calling `render_string`; the compiler refuses access to them inside
+`Tape.local` to prevent references to temporary storage escaping.
 
 `Slang.embed(filename, io)` writes directly to a supplied writer implementing
 `<<`. This includes `Slang::TapeBuffer.new(capacity)` in a tape scope and an
@@ -171,6 +173,8 @@ after a tag or a quoted value, `p= name` and `a href="/"= name` need none.
 - `render` returns `TapeString` in a caller-owned `Tape.scope`. Use
   `render_string` for an independent `String`. Both render through tape;
   `render_tape`, `render_heap` and the former `Buffer` class are removed.
+- `render_string` always uses an independent `Tape.local` and releases its
+  temporary buffers before returning, including inside a caller's scope.
 - Splat expressions are evaluated once per element, after explicit class
   expressions and before ordinary attributes.
 - Fixed bugs of the original:

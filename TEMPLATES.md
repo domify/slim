@@ -8,7 +8,7 @@ The full syntax table is in the [README](README.md#syntax).
 ## Rendering
 
 ```ruby
-import github.com/domify/slang::{Slang}
+import github.com/domify/ris-slang::{Slang}
 
 def page(title : String, items : Array(String)) : TapeString
   Slang.render("views/page.slang")
@@ -23,9 +23,11 @@ end
 - `render(filename, capacity = 256)` returns a `TapeString` and requires the
   caller's active `Tape.scope`.
 - `render_string(filename, capacity = 256)` returns an independent `String`.
-  It renders on tape and copies before returning, opening a scope if needed.
-- An inner scope shares the outer tape and releases nothing on its own.
-  Repeated copies in one long outer scope retain their temporary buffers.
+  It renders on an independent `Tape.local`, copies before returning, and
+  immediately releases its temporary buffers for reuse.
+- `Tape.scope` shares an existing tape; `Tape.local` always owns a separate
+  tape. A `render_string` template can read outer `TapeString` values; convert
+  other outer tape values to owned data before entering the local tape.
 - `Slang.embed` accepts a `Slang::TapeBuffer` or another writer with `<<`.
   A tape buffer's `finish` borrows its bytes; do not append after finishing.
 - The template becomes ris code at compile time; diagnostics name the
