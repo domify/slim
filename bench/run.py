@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compile identical Slang workloads, verify bytes, measure shuffled rounds."""
+"""Compile identical Slim workloads, verify bytes, measure shuffled rounds."""
 import argparse, hashlib, json, os, platform, random, shutil, statistics, subprocess, time
 from pathlib import Path
 
@@ -55,13 +55,13 @@ def heap_only_runtime(source):
     source = source[:start] + """  macro render(filename, capacity = 256)
     begin
       %buffer = ::String::Builder.new({{capacity}})
-      ::Slang::Slang.embed({{filename}}, %buffer)
+      ::Slim::Slim.embed({{filename}}, %buffer)
       %buffer.to_s
     end
   end
 
   macro render_string(filename, capacity = 256)
-    ::Slang::Slang.render({{filename}}, {{capacity}})
+    ::Slim::Slim.render({{filename}}, {{capacity}})
   end
 """ + source[end:]
     code = '\n'.join(line for line in source.splitlines() if not line.lstrip().startswith('#'))
@@ -76,7 +76,7 @@ def main():
     ap.add_argument('--skip-build', action='store_true', help='Reuse binaries from an unchanged previous build')
     ap.add_argument('--iterations', type=int, default=200000)
     ap.add_argument('--rounds', type=int, default=7)
-    ap.add_argument('--build-dir', type=Path, default=Path('/tmp/slang-tape-first-bench'))
+    ap.add_argument('--build-dir', type=Path, default=Path('/tmp/slim-tape-first-bench'))
     a = ap.parse_args()
     if a.iterations < 1 or a.rounds < 1:
         ap.error('iterations and rounds must be positive')
@@ -92,6 +92,7 @@ def main():
         folder = build/f'{compiler}-{mode}'; folder.mkdir(exist_ok=True)
         if compiler == 'crystal':
             ext = '.cr'
+            lib = 'slang'
             library = folder/'lib/slang'
             shutil.copytree(ROOT/'archive/crystal', library, dirs_exist_ok=True)
             dependencies = sorted((library/'src').rglob('*.cr'))
@@ -100,22 +101,23 @@ def main():
             optimized_iyi = mode.startswith('optimized-')
             src = ROOT if optimized_iyi or compiler == 'ris' else IYI
             source_ext = '.ri' if optimized_iyi or compiler == 'ris' else '.iyi'
-            for rel in ['slang'+ext, 'slang/process'+ext, 'iyi.mod']:
+            lib = 'slim' if src == ROOT else 'slang'
+            for rel in [lib+ext, lib+'/process'+ext, 'iyi.mod']:
                 dest=folder/rel; dest.parent.mkdir(exist_ok=True)
-                source_rel = rel.replace('slang', 'slim') if src == ROOT else rel
-                original = src/(source_rel.replace(ext, source_ext) if rel.endswith(ext) else source_rel)
+                original = src/(rel.replace(ext, source_ext) if rel.endswith(ext) else rel)
                 content = original.read_text()
-                if optimized_iyi and rel == 'slang'+ext:
+                if optimized_iyi and rel == lib+ext:
                     content = heap_only_runtime(content)
                 dest.write_text(content)
-            dependencies = [folder/('slang'+ext),folder/('slang/process'+ext)]
+            dependencies = [folder/(lib+ext),folder/(lib+'/process'+ext)]
+        api = lib.capitalize()
         for workload, template in TEMPLATES.items():
-            (folder/(workload+'.slang')).write_text(template)
-            body = 'html = Slang.render("'+workload+'.slang")\n    ptr = html.to_unsafe\n    size = html.bytesize'
+            (folder/(workload+'.'+lib)).write_text(template)
+            body = 'html = '+api+'.render("'+workload+'.'+lib+'")\n    ptr = html.to_unsafe\n    size = html.bytesize'
             if compiler == 'crystal' or mode.endswith('builder'):
-                body = 'html = String.build do |buf|\n      Slang.embed("'+workload+'.slang", buf)\n    end\n    ptr = html.to_unsafe\n    size = html.bytesize'
+                body = 'html = String.build do |buf|\n      '+api+'.embed("'+workload+'.'+lib+'", buf)\n    end\n    ptr = html.to_unsafe\n    size = html.bytesize'
             elif mode == 'render_string':
-                body = 'html = Slang.render_string("'+workload+'.slang")\n    ptr = html.to_unsafe\n    size = html.bytesize'
+                body = 'html = '+api+'.render_string("'+workload+'.'+lib+'")\n    ptr = html.to_unsafe\n    size = html.bytesize'
             tape_scope = compiler == 'ris' and mode == 'render'
             consume = '''\n    bytes += size.to_i64
     k = 0
@@ -123,7 +125,7 @@ def main():
       checksum = (checksum ^ ptr[k].to_u64) &* 1099511628211_u64
       k += 1
     end'''
-            code = ('require "slang"\n' if compiler == 'crystal' else 'module benchmark\nimport slang::{Slang}\n')+'''title = "Tere <maailm> & café"
+            code = ('require "slang"\n' if compiler == 'crystal' else 'module benchmark\nimport '+lib+'::{'+api+'}\n')+'''title = "Tere <maailm> & café"
 items = ["one", "two & three", "<four>", "viis", "kuus", "seitse", "kaheksa", "üheksa"]
 css = "active & selected"
 checksum = 14695981039346656037_u64
