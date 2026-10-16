@@ -44,3 +44,8 @@ all benchmark variants before starting sequential, shuffled measurements.
   #{@line_number}, column #{@column_number}"`.
 - Follow the original's code closely where nothing needs fixing; it keeps
   the port comparable to `archive/crystal/`.
+
+## Commits
+
+- Do not add `Co-Authored-By: Claude …`, "Generated with Claude Code" or any
+  other AI attribution to commit messages or pull request descriptions.
