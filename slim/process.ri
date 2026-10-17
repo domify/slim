@@ -182,7 +182,13 @@ class Lexer
       end
     elsif c == '-'
       @token.escaped = false
-      consume_control
+      # After a tag on its line, `-` is text, as in Slim: `td -` is a dash.
+      # Code is a line of its own.
+      if inline
+        consume_text
+      else
+        consume_control
+      end
     elsif c == '=' || (c == '!' && peek_next_char == '=')
       consume_output
     elsif c == '|' || c == '\''

@@ -76,6 +76,8 @@ end
 - `if`/`elsif`/`else`, `case`/`when`/`in`, `each do |x|` and assignments
   work. Longer code goes in an `ris:` block or, better, in a function of
   the `.ri` file.
+- Code is a line of its own. After a tag, `-` is text, as in Slim:
+  `td -` is a cell with a dash. (Slang read it as code.)
 
 ## Attributes
 

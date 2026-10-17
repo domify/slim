@@ -19,7 +19,7 @@ rendered page is ordinary compiled code by the time the program runs.
 Add it to a consuming project's `ris.mod`; `ris` fetches the tag from GitHub:
 
 ```text
-require github.com/domify/slim v0.1.0
+require github.com/domify/slim v0.2.0
 ```
 
 ## Usage
