@@ -190,7 +190,14 @@ class Lexer
         consume_control
       end
     elsif c == '=' || (c == '!' && peek_next_char == '=')
-      consume_output
+      # Output follows a tag or its attributes. After text on the line - an
+      # interpolation, `code #{var}=5` - `=` is text, as in Slim.
+      if inline && @last_token.type == "TEXT"
+        @token.escaped = false
+        consume_text
+      else
+        consume_output
+      end
     elsif c == '|' || c == '\''
       @token.escaped = false
       if inline

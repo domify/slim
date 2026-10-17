@@ -57,6 +57,8 @@ end
 - Use `!=` only for HTML your own code made; never for user input, unless
   every value in it went through `Slim.escape` or `HTML.escape`.
 - Output on its own line is `= expr` or `!= expr`.
+- Output follows a tag or its attributes only: in `code #{x}=5` the `=`
+  is text. (Slang read it as output.)
 
 ## Code
 
