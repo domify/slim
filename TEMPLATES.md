@@ -59,6 +59,8 @@ end
 - Output on its own line is `= expr` or `!= expr`.
 - Output follows a tag or its attributes only: in `code #{x}=5` the `=`
   is text. (Slang read it as output.)
+- A backslash in text is printed, as in Slim: `p C:\dir` is `C:\dir`.
+  Only `\#{` is an escape, printing `#{` without interpolating.
 
 ## Code
 

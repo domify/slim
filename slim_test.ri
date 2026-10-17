@@ -243,6 +243,11 @@ def blocks
   checked_render("spec/blocks.slim")
 end
 
+def backslash
+  x = "X"
+  checked_render("spec/backslash.slim")
+end
+
 def inline_dash
   checked_render("spec/inline-dash.slim")
 end
@@ -317,9 +322,9 @@ cases = [
   {"basic document", basic, "<!DOCTYPE html><html><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\"><title>This is a title</title><style>h1 {color: red;}\np {color: green;}</style><style>h2 {color: blue;}</style></head><body><!--Multi-line comment<span>this is wrapped in a comment</span>\n--><!--[if IE]><p>Dat browser is old.</p>\n<![endif]--><h1>This is a slim file</h1><h2>This is blue</h2><span id=\"some-id\" class=\"classname\"><div id=\"hello\" class=\"world world2\"><span><span data-some-var=\"hello world haha\" two-attr=\"fun\">and a hello</span><span><span class=\"deep_nested\"><p>text inside of <p></p>4242text nodeother text node </span></span></span><span class=\"alongside\" pid=\"4242\"><custom-tag id=\"with-id\" pid=\"4242\"><span>ah</span><span>oh</span></custom-tag></span></div></span><div id=\"amazing-div\" some-attr=\"hello\"></div><!--This is a visible comment--><script>var num1 = 8*4;</script><script>var num2 = 8*3;\nalert(\"8 * 3 + 8 * 4 = \" + (num1 + num2));</script></body></html>"},
   {"UTF-8 text", utf8, "<!DOCTYPE html><html><head><title>Привет, мир</title></head><body><p>Предложение</p></body></html>"},
   {"a dash after interpolation is text", edge_control, "<span>my-5</span>"},
-  {"escaped control code", edge_control_escaped, "<span>my-5</span>"},
+  {"a backslash in text is kept", edge_control_escaped, "<span>my\\-5</span>"},
   {"= after interpolation is text", edge_output, "<code>x=5</code>"},
-  {"escaped output", edge_output_escaped, "<code>x=5</code>"},
+  {"a backslash before = is kept", edge_output_escaped, "<code>x\\=5</code>"},
   {"string attribute", attr_string, "<span attr=\"hello\"></span>"},
   {"string attribute with spaces", attr_string_spaces, "<span attr=\"hello world\"></span>"},
   {"dynamic class", attr_dynamic_class, "<span class=\"my-class\">Foo</span>"},
@@ -355,6 +360,7 @@ cases = [
   {"javascript", script, "<script src=\"https://somecdn/vue.min.js\"></script><script>var num = 8*3;\nconsole.log(num);</script><script>var num = 8*4;</script><script>new Vue({\n  el: '#app',\n  template: `\n    <div>\n      something\n    </div>\n  `\n})</script>"},
   {"stylesheets", style, "<style>h1 {color:red;}\np {\n  color:blue;\n}</style><style>h2 {color:green;}</style>"},
   {"blocks", blocks, "#{numbers}<div>#{numbers}</div>"},
+  {"backslashes as Slim keeps them", backslash, "<p>a\\b \\n c</p><p>\#{x} and X</p>path C:\\dir\\file"},
   {"a dash after a tag is text", inline_dash, "<table><tr><td>-</td><td>- 3</td></tr></table><li>- Coming soon</li>"},
   {"output with a block", form_helper, "#{form}<div>#{form}</div><div>#{form}</div>"},
   {"boolean attributes", boolean_attributes, "<input type=\"checkbox\" checked><input type=\"checkbox\"><input type=\"checkbox\" checked=\"checked\"><input type=\"checkbox\" checked><input type=\"checkbox\"><input type=\"checkbox\" checked=\"hello\">"},

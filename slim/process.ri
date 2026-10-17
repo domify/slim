@@ -444,6 +444,13 @@ class Lexer
           next_char
           next
         end
+        # Text keeps its backslashes, as in Slim: `\-5` prints `\-5`. Only
+        # `\#{` stays an escape, printing `#{` without interpolating.
+        if current_char == '\\' && peek_next_char != '#'
+          text += "\\\\"
+          next_char
+          next
+        end
       else
         if (close_char == '"' || close_char == '\'') && current_char == close_char && !escaped
           text += current_char.to_s
