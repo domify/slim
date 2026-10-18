@@ -3,7 +3,7 @@ set -eu
 cd "$(dirname "$0")"
 export IYI_CACHE_DIR="${IYI_CACHE_DIR:-/tmp/slim-check-cache}"
 RIS="${RIS:-ris}"
-export IYI_PATH="$PWD:$("$RIS" env RIS_PATH)"
+export IYI_PATH="$PWD:$("$RIS" env IYI_PATH)"
 "$RIS" test
 "$RIS" run -Dslim_string slim_test.ri
 scratch=$(mktemp -d /tmp/slim-check.XXXXXX)
