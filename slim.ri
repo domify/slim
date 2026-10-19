@@ -20,8 +20,8 @@
 #
 # `render` returns Tape::String bytes owned by the caller's tape block.
 # `render_string` uses its own local_tape and copies a retained String.
-# `embed` accepts TapeBuffer or a user writer. Escaping and class joining
-# stream into the sink; integer output and Tape::String values need no temporary String.
+# `embed` accepts TapeBuffer or a user writer with text/emit/raw/capture hooks.
+# Escaping and class joining stream into the sink; integer output and Tape::String values need no temporary String.
 #
 # As in Slim, the HTML has no whitespace between tags: `'` ends text with a
 # space, and `tag<` / `tag>` / `=<` / `=>` put one before / after.
@@ -86,21 +86,59 @@ pub struct Slim
     end
   end
 
+  # A sink may preserve safe values and captured HTML in its own types.
+  def self.write_text(buffer : B, text : String) : Nil forall B
+    if buffer.responds_to?(:text)
+      buffer.text(text)
+    else
+      buffer << text
+    end
+  end
+
+  def self.write_raw(buffer : B, value : T) : Nil forall B, T
+    if buffer.responds_to?(:raw)
+      buffer.raw(value)
+    else
+      default_raw(buffer, value)
+    end
+  end
+
+  def self.write_escaped(buffer : B, value : T) : Nil forall B, T
+    if buffer.responds_to?(:emit)
+      buffer.emit(value)
+    else
+      default_escaped(buffer, value)
+    end
+  end
+
+  # The result type belongs to the sink. Generate this dispatcher so its
+  # body travels with exported macros, rather than a fixed return type.
+  macro define_capture
+    def self.capture(buffer : B, & : B | String::Builder -> T) forall B, T
+      \{% if B.has_method?(:capture) %}
+        buffer.capture { yield buffer }
+      \{% else %}
+        String.build { |sub| yield sub }
+      \{% end %}
+    end
+  end
+  define_capture
+
   # Keep the <<-only sink contract. Built-in buffers copy raw byte runs;
   # a custom writer receives a String for each run instead.
   def self.write_bytes(buffer : B, bytes : Pointer(UInt8), count : Int32) : Nil forall B
-    buffer << String.new(count) { |dest| dest.copy_from(bytes, count) } if count > 0
+    write_text(buffer, String.new(count) { |dest| dest.copy_from(bytes, count) }) if count > 0
   end
 
   def self.write_bytes(buffer : String::Builder | TapeBuffer, bytes : Pointer(UInt8), count : Int32) : Nil
     buffer.write(bytes, count) if count > 0
   end
 
-  def self.write_raw(buffer : B, value : T) : Nil forall B, T
-    buffer << value.to_s
+  def self.default_raw(buffer : B, value : T) : Nil forall B, T
+    write_text(buffer, value.to_s)
   end
 
-  def self.write_raw(buffer : B, value : Tape::String) : Nil forall B
+  def self.default_raw(buffer : B, value : Tape::String) : Nil forall B
     write_tape(buffer, value, false)
   end
 
@@ -115,35 +153,35 @@ pub struct Slim
   end
 
   def self.write_tape(buffer : B, value : Tape::String, escape : Bool) : Nil forall B
-    escape ? escape_text(buffer, value.to_s) : (buffer << value.to_s)
+    escape ? escape_text(buffer, value.to_s) : (write_text(buffer, value.to_s))
   end
 
-  def self.write_escaped(buffer : B, value : T) : Nil forall B, T
+  def self.default_escaped(buffer : B, value : T) : Nil forall B, T
     escape_text(buffer, value.to_s)
   end
 
-  def self.write_escaped(buffer : B, value : Tape::String) : Nil forall B
+  def self.default_escaped(buffer : B, value : Tape::String) : Nil forall B
     write_tape(buffer, value, true)
   end
 
   DIGITS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
 
-  def self.write_raw(buffer : B, value : Int8 | Int16 | Int32 | Int64) : Nil forall B
+  def self.default_raw(buffer : B, value : Int8 | Int16 | Int32 | Int64) : Nil forall B
     number = value.to_i64
     if number < 0
-      buffer << "-"
+      write_text(buffer, "-")
       write_unsigned(buffer, (-(number + 1)).to_u64 + 1_u64)
     else
       write_unsigned(buffer, number.to_u64)
     end
   end
 
-  def self.write_raw(buffer : B, value : UInt8 | UInt16 | UInt32 | UInt64) : Nil forall B
+  def self.default_raw(buffer : B, value : UInt8 | UInt16 | UInt32 | UInt64) : Nil forall B
     write_unsigned(buffer, value.to_u64)
   end
 
-  def self.write_escaped(buffer : B, value : Int8 | Int16 | Int32 | Int64 | UInt8 | UInt16 | UInt32 | UInt64) : Nil forall B
-    write_raw(buffer, value)
+  def self.default_escaped(buffer : B, value : Int8 | Int16 | Int32 | Int64 | UInt8 | UInt16 | UInt32 | UInt64) : Nil forall B
+    default_raw(buffer, value)
   end
 
   def self.write_unsigned(buffer : B, value : UInt64) : Nil forall B
@@ -152,7 +190,7 @@ pub struct Slim
       divisor *= 10_u64
     end
     while divisor > 0_u64
-      buffer << DIGITS[((value // divisor) % 10_u64).to_i32]
+      write_text(buffer, DIGITS[((value // divisor) % 10_u64).to_i32])
       divisor //= 10_u64
     end
   end
@@ -172,7 +210,7 @@ pub struct Slim
                     end
       unless replacement.empty?
         write_bytes(buffer, ptr + start, i - start)
-        buffer << replacement
+        write_text(buffer, replacement)
         start = i + 1
       end
       i += 1
@@ -200,16 +238,16 @@ pub struct Slim
   end
 
   def self.attribute(buffer : B, name : String, value : Bool) : Nil forall B
-    buffer << " " << name if value
+    write_text(buffer, " " + name) if value
   end
 
   def self.attribute(buffer : B, name : String, value : Nil) : Nil forall B
   end
 
   def self.attribute(buffer : B, name : String, value : T) : Nil forall B, T
-    buffer << " " << name << "=\""
-    write_escaped(buffer, value)
-    buffer << "\""
+    write_text(buffer, " " + name + "=\"")
+    default_escaped(buffer, value)
+    write_text(buffer, "\"")
   end
 
   # The class names of an element, its `.name`s, `class=` values and the
@@ -217,7 +255,7 @@ pub struct Slim
   def self.class_attribute(buffer : B, values : Array(String)) : Nil forall B
     written = false
     values.each { |value| written = class_part(buffer, value, written) }
-    buffer << "\"" if written
+    write_text(buffer, "\"") if written
   end
 
   # Returns whether the class attribute has started; no intermediate array
@@ -225,8 +263,8 @@ pub struct Slim
   def self.class_part(buffer : B, value : T, written : Bool) : Bool forall B, T
     text = value.to_s
     return written if text.blank?
-    buffer << (written ? " " : " class=\"")
-    write_escaped(buffer, text)
+    write_text(buffer, (written ? " " : " class=\""))
+    default_escaped(buffer, text)
     true
   end
 

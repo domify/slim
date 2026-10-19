@@ -41,7 +41,8 @@ end
   writes either result without escaping.
 - Escaped/raw output and ordinary attributes accept `TapeString` directly.
   Classes retain their String/blank-filtering semantics. Helpers accepting
-  nested HTML still receive a `String`, built with a heap builder.
+  nested HTML receive a String by default, or the custom sink's capture result.
+  Sinks may supply `text`, `emit`, `raw` and `capture` hooks.
 
 ## Output and escaping
 
