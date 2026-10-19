@@ -707,7 +707,7 @@ class Node
       @nodes.each { |node| node.to_s(w, buffer) }
       w << "#<loc:pop>"
     elsif @kind == "doctype"
-      w << "::Slim::Slim.write_text(#{buffer}, \"<!DOCTYPE #{value}>\")"
+      w << "#{buffer} << \"<!DOCTYPE #{value}>\""
     elsif @kind == "element"
       element(w, buffer)
     elsif @kind == "control"
@@ -729,8 +729,8 @@ class Node
     name = @token.name || "div"
     attributes = @nodes.select { |node| node.kind == "attribute" }
     splat = @token.splat
-    w << "::Slim::Slim.write_text(#{buffer}, \" \")" if @token.prepend_whitespace
-    w << "::Slim::Slim.write_text(#{buffer}, \"<#{name}\")"
+    w << "#{buffer} << \" \"" if @token.prepend_whitespace
+    w << "#{buffer} << \"<#{name}\""
     if id = attributes.find { |attribute| attribute.token.name == "id" }
       w << "::Slim::Slim.attribute(#{buffer}, \"id\", (#{w.loc(id.token)}#{id.value}))"
     end
@@ -747,7 +747,7 @@ class Node
         splat = saved
         w << "#{state} = ::Slim::Slim.class_part(#{buffer}, (#{saved})[\"class\"]?.to_s, #{state})"
       end
-      w << "::Slim::Slim.write_text(#{buffer}, \"\\\"\") if #{state}"
+      w << "#{buffer} << \"\\\"\" if #{state}"
     end
     attributes.each do |attribute|
       attribute_name = attribute.token.name || ""
@@ -755,10 +755,10 @@ class Node
       w << "::Slim::Slim.attribute(#{buffer}, \"#{attribute_name}\", (#{w.loc(attribute.token)}#{attribute.value}))"
     end
     w << "::Slim::Slim.splat(#{buffer}, (#{splat}))" if splat
-    w << "::Slim::Slim.write_text(#{buffer}, \">\")"
+    w << "#{buffer} << \">\""
     @nodes.each { |node| node.to_s(w, buffer) }
-    w << "::Slim::Slim.write_text(#{buffer}, \"</#{name}>\")" unless SELF_CLOSING_TAGS.includes?(name)
-    w << "::Slim::Slim.write_text(#{buffer}, \" \")" if @token.append_whitespace
+    w << "#{buffer} << \"</#{name}>\"" unless SELF_CLOSING_TAGS.includes?(name)
+    w << "#{buffer} << \" \"" if @token.append_whitespace
   end
 
   private def first_child? : Bool
@@ -771,18 +771,15 @@ class Node
   end
 
   private def text(w : Writer, buffer : String) : Nil
-    w << "::Slim::Slim.write_text(#{buffer}, \" \")" if @token.prepend_whitespace
-    w << "::Slim::Slim.write_text(#{buffer}, \"\\n\")" if @token.raw_text && !first_child? && !@token.text_block && !empty_parent? && !@token.inline
-    w << "::Slim::Slim.write_text(#{buffer}, \"#{indentation}\")" if indent? && @token.raw_text
+    w << "#{buffer} << \" \"" if @token.prepend_whitespace
+    w << "#{buffer} << \"\\n\"" if @token.raw_text && !first_child? && !@token.text_block && !empty_parent? && !@token.inline
+    w << "#{buffer} << \"#{indentation}\"" if indent? && @token.raw_text
     open, close = @token.escaped ? {"::Slim::Slim.write_escaped(#{buffer}, (", "))"} : {"::Slim::Slim.write_raw(#{buffer}, (", "))"}
-    if !@token.escaped && @token.type != "OUTPUT"
-      open, close = {"::Slim::Slim.write_text(#{buffer}, (", "))"}
-    end
     if @token.type == "OUTPUT" && children?
-      # `= expr do` passes the sink's captured HTML to the method.
+      # `= expr do` passes the block's HTML to the method as a String.
       sub = w.unique(buffer)
       w << "#{open}#{w.loc(@token)}#{value}"
-      w << "::Slim::Slim.capture(#{buffer}) do |#{sub}|"
+      w << "String.build do |#{sub}|"
       @nodes.each { |node| node.to_s(w, sub) }
       w << "end"
       w << "end#{close}"
@@ -790,7 +787,7 @@ class Node
       w << "#{open}#{w.loc(@token)}#{value}\n#{close}"
       @nodes.each { |node| node.to_s(w, buffer) }
     end
-    w << "::Slim::Slim.write_text(#{buffer}, \" \")" if @token.append_whitespace
+    w << "#{buffer} << \" \"" if @token.append_whitespace
   end
 
   # A `ris:`, `crystal:` or `iyi:` block: its lines are code, as they are.
@@ -804,16 +801,16 @@ class Node
   private def comment(w : Writer, buffer : String) : Nil
     return unless @token.visible
     conditional = @token.conditional
-    w << "::Slim::Slim.write_text(#{buffer}, \"#{indentation}\")" if indent?
-    w << "::Slim::Slim.write_text(#{buffer}, \"<!--\")"
-    w << "::Slim::Slim.write_text(#{buffer}, \"[#{conditional}]>\")" unless conditional.empty?
-    w << "::Slim::Slim.write_text(#{buffer}, \"#{value}\")" if @token.value
+    w << "#{buffer} << \"#{indentation}\"" if indent?
+    w << "#{buffer} << \"<!--\""
+    w << "#{buffer} << \"[#{conditional}]>\"" unless conditional.empty?
+    w << "#{buffer} << \"#{value}\"" if @token.value
     if children?
       @nodes.each { |node| node.to_s(w, buffer) }
-      w << "::Slim::Slim.write_text(#{buffer}, \"\\n#{indentation}\")"
+      w << "#{buffer} << \"\\n#{indentation}\""
     end
-    w << "::Slim::Slim.write_text(#{buffer}, \"<![endif]\")" unless conditional.empty?
-    w << "::Slim::Slim.write_text(#{buffer}, \"-->\")"
+    w << "#{buffer} << \"<![endif]\"" unless conditional.empty?
+    w << "#{buffer} << \"-->\""
   end
 end
 

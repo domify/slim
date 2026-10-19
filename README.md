@@ -66,12 +66,7 @@ before calling `render_string`; the compiler refuses access to them inside
 
 `Slim.embed(filename, io)` writes directly to a supplied writer implementing
 `<<`. This includes `Slim::TapeBuffer.new(capacity)` in a tape scope and an
-explicitly supplied `String::Builder`. A sink may implement `text(String)` (instead of `<<`),
-`emit(value)`, `raw(value)` and `capture { ... }` to supply its own text,
-escaping, safe-value and capture semantics. Helper blocks write into
-the same sink when it has `capture` and return that capture result;
-otherwise they use `String.build`. Attributes always escape their values.
-A tape buffer's `finish` returns a
+explicitly supplied `String::Builder`. A tape buffer's `finish` returns a
 borrowed `TapeString`; `to_s` makes a retained String copy. Do not append or
 grow that buffer after taking a view of its bytes.
 
@@ -88,7 +83,8 @@ Rendering now streams escaped bytes and class names into the sink instead
 of collecting fragments, escaped byte arrays or joined class strings.
 Escaped and raw `TapeString` values and 8–64-bit integer output avoid
 intermediate heap strings. Interpolated expressions forming a String,
-non-integer `to_s`, and default HTML block captures may allocate on the heap.
+non-integer `to_s`, and HTML blocks passed to helpers retain their String
+semantics and may allocate on the heap.
 
 [TEMPLATES.md](TEMPLATES.md) is a short guide to writing templates, for
 agents and people who know Slim; [AGENTS.md](AGENTS.md) is for working on
@@ -162,8 +158,6 @@ after a tag or a quoted value, `p= name` and `a href="/"= name` need none.
 
 ## Differences from Crystal Slang 2.0.3
 
-- Custom sinks may define `text`, `emit`, `raw` and `capture` hooks; helper
-  blocks receive the sink's capture result, a String by default.
 - Raw output is `!=`, as in Haml and Pug, so it does not read as a
   comparison; `==` stops the template with an error.
 - An attribute whose value is `false` or `nil` is left out and `true` writes
