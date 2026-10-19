@@ -23,9 +23,9 @@ end
 - `render(filename, capacity = 256)` returns a `TapeString` and requires the
   caller's active `Tape.scope`.
 - `render_string(filename, capacity = 256)` returns an independent `String`.
-  It renders on an independent `Tape.local`, copies before returning, and
+  It renders on an independent `local_tape`, copies before returning, and
   immediately releases its temporary buffers for reuse.
-- `Tape.scope` shares an existing tape; `Tape.local` always owns a separate
+- `Tape.scope` shares an existing tape; `local_tape` always owns a separate
   tape. A `render_string` template can read outer `TapeString` values; convert
   other outer tape values to owned data before entering the local tape.
 - `Slim.embed` accepts a `Slim::TapeBuffer` or another writer with `<<`.

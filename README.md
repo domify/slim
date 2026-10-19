@@ -57,12 +57,12 @@ same retained copy directly. `render_string` is the convenience spelling
 that manages an independent temporary tape.
 
 `render_string(filename, capacity = 256)` uses the same tape renderer and
-copies its output before returning. It always uses `Tape.local`, independently
+copies its output before returning. It always uses `local_tape`, independently
 of any caller's `Tape.scope`, and releases its temporary buffers immediately.
 The runtime can reuse that memory on the next call. Outer `TapeString` values
 may be read by the template. Convert other outer tape values to owned data
 before calling `render_string`; the compiler refuses access to them inside
-`Tape.local` to prevent references to temporary storage escaping.
+`local_tape` to prevent references to temporary storage escaping.
 
 `Slim.embed(filename, io)` writes directly to a supplied writer implementing
 `<<`. This includes `Slim::TapeBuffer.new(capacity)` in a tape scope and an
@@ -170,7 +170,7 @@ after a tag or a quoted value, `p= name` and `a href="/"= name` need none.
 - `render` returns `TapeString` in a caller-owned `Tape.scope`. Use
   `render_string` for an independent `String`. Both render through tape;
   `render_tape`, `render_heap` and the former `Buffer` class are removed.
-- `render_string` always uses an independent `Tape.local` and releases its
+- `render_string` always uses an independent `local_tape` and releases its
   temporary buffers before returning, including inside a caller's scope.
 - Splat expressions are evaluated once per element, after explicit class
   expressions and before ordinary attributes.

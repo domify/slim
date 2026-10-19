@@ -19,7 +19,7 @@
 #         p Hello, #{name}!         / text is HTML; #{} in it is escaped
 #
 # `render` returns Tape::String bytes owned by the caller's tape block.
-# `render_string` uses its own Tape.local and copies a retained String.
+# `render_string` uses its own local_tape and copies a retained String.
 # `embed` accepts TapeBuffer or a user writer. Escaping and class joining
 # stream into the sink; integer output and Tape::String values need no temporary String.
 #
@@ -256,7 +256,7 @@ pub struct Slim
   macro render_string(filename, capacity = 256)
     begin
       %result = ""
-      ::Tape.local do
+      ::local_tape do
         %result = ::Slim::Slim.render({{filename}}, {{capacity}}).to_s
       end
       %result
