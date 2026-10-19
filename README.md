@@ -147,7 +147,7 @@ With `title = "Slim"`, `name = "<world>"`, `items = ["one", "two"]` and
 | `tag text`, `\| text` | Text, which is HTML; `#{expr}` in it is escaped. |
 | `' text` | Text followed by a space. |
 | `tag= expr`, `tag!= expr`, `= expr`, `!= expr` | Output, escaped or raw, in the element or on its own line. `=<`, `=>`, `tag<` and `tag>` put a space before or after. |
-| `= expr do \|x\|` | A method that takes the nested HTML as a block's `String`, such as a form helper. |
+| `= expr do \|x\|` | A helper receiving the sink's captured HTML (`String` by default). |
 | `- code` | ris code: `if`/`elsif`/`else`, `case`/`when`/`in`, `each do`, assignments. |
 | `/ text`, `/! text`, `/[if IE]` | An invisible, a visible and a conditional comment. |
 | `javascript:`, `css:` | A `script` or `style` element with verbatim text. |
@@ -183,6 +183,8 @@ after a tag or a quoted value, `p= name` and `a href="/"= name` need none.
   temporary buffers before returning, including inside a caller's scope.
 - Splat expressions are evaluated once per element, after explicit class
   expressions and before ordinary attributes.
+- Quoted text and interpolations do not change where a multiline text
+  block ends; its source column determines indentation.
 - Fixed bugs of the original:
   - `=<` and `=>` put a space before and after the output; the original
     added it to the code.

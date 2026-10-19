@@ -217,8 +217,8 @@ class Lexer
         @token.append_whitespace = c == '\''
         next_char
         skip_whitespace
+        @raw_text_column = @column_number
         consume_text
-        @raw_text_column = (@column_number - (@token.value || "").chars.size) + 2 # +2 for the quotation marks
       end
     elsif c == '<'
       @token.escaped = false
@@ -790,7 +790,8 @@ class Node
     end
     if @token.type == "OUTPUT" && children?
       # `= expr do` passes the sink's captured HTML to the method.
-      sub = w.unique(buffer)
+      # Code lines keep referring to this sink inside a capture.
+      sub = buffer
       w << "#{open}#{w.loc(@token)}#{value}"
       w << "::Slim::Slim.capture(#{buffer}) do |#{sub}|"
       @nodes.each { |node| node.to_s(w, sub) }

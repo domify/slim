@@ -115,7 +115,7 @@ pub struct Slim
   # The result type belongs to the sink. Generate this dispatcher so its
   # body travels with exported macros, rather than a fixed return type.
   macro define_capture
-    def self.capture(buffer : B, & : B | String::Builder -> T) forall B, T
+    def self.capture(buffer : B, & : -> Nil) forall B
       \{% if B.has_method?(:capture) %}
         buffer.capture { yield buffer }
       \{% else %}
