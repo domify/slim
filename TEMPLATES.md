@@ -111,9 +111,7 @@ line renders as `<p>…</p><a>…</a>`. Where a space matters:
 
 - `' text` is text followed by a space;
 - `a<`, `a>`, `a<>` put a space before, after or around the element;
-- `=<`, `=>` do the same for output;
-- `~ "\n  "` writes a quoted ris string exactly, using ris escape sequences.
-  It writes a newline and two spaces here; nesting adds no indentation.
+- `=<`, `=>` do the same for output.
 
 ## Checklist
 

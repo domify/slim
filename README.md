@@ -152,7 +152,6 @@ With `title = "Slim"`, `name = "<world>"`, `items = ["one", "two"]` and
 | `/ text`, `/! text`, `/[if IE]` | An invisible, a visible and a conditional comment. |
 | `javascript:`, `css:` | A `script` or `style` element with verbatim text. |
 | `ris:`, `iyi:`, `crystal:` | Lines of ris code. |
-| `~ "\n  "` | A quoted ris string, written exactly (including whitespace). |
 | `doctype html` | `<!DOCTYPE html>`. |
 
 As in Slim, there is no whitespace between tags. An attribute value without
@@ -163,8 +162,6 @@ after a tag or a quoted value, `p= name` and `a href="/"= name` need none.
 
 ## Differences from Crystal Slang 2.0.3
 
-- `~ "\n  "` writes a quoted ris string exactly, with ris escape sequences.
-  Use it for explicit newlines and indentation when matching existing HTML.
 - Custom sinks may define `text`, `emit`, `raw` and `capture` hooks; helper
   blocks receive the sink's capture result, a String by default.
 - Raw output is `!=`, as in Haml and Pug, so it does not read as a

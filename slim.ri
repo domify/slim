@@ -25,7 +25,6 @@
 #
 # As in Slim, the HTML has no whitespace between tags: `'` ends text with a
 # space, and `tag<` / `tag>` / `=<` / `=>` put one before / after.
-# `~ "\n  "` writes a quoted string exactly, including its whitespace.
 #
 # Differences from the Crystal original:
 #   * Raw output is `!=`, as in Haml; `==` stops the template with an

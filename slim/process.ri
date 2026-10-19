@@ -198,16 +198,6 @@ class Lexer
       else
         consume_output
       end
-    elsif c == '~' && !inline
-      next_char
-      skip_whitespace
-      @token.type = "LITERAL"
-      @token.escaped = false
-      @token.value = consume_line(false).strip
-      literal = @token.value || ""
-      unless literal.starts_with?("\"") && literal.ends_with?("\"")
-        raise "slim: ~ expects a quoted string at line #{@line_number}, column #{@column_number}"
-      end
     elsif c == '|' || c == '\''
       @token.escaped = false
       if inline
