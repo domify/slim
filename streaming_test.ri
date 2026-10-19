@@ -75,13 +75,13 @@ check(sink.to_s, expected)
 
 def tape_page(expected : String) : Nil
   copy = ""
-  Tape.scope do
+  tape do
     blank = "　 \t"
     classes = "é & \"test\""
     number = -9223372036854775807_i64 - 1_i64
     # Both escaped and raw tape model values must render without to_s first.
-    text = TapeString.build(1) { |writer| writer.append("<&>\"' café Привет") }
-    raw = TapeString.build(1) { |writer| writer.append("<b>raw</b>") }
+    text = Tape::String.build(1) { |writer| writer.append("<&>\"' café Привет") }
+    raw = Tape::String.build(1) { |writer| writer.append("<b>raw</b>") }
     page = Slim.render("spec/streaming.slim", 0)
     copy = page.to_s
     check(copy, expected)
@@ -96,7 +96,7 @@ COUNTER.reset
 check(Slim.render_string("spec/splat-once.slim"), "<span class=\"first middle last &amp; more\" title=\"x&lt;y\"></span>")
 check(COUNTER.calls.to_s, "1")
 check(COUNTER.events, "classsplat")
-Tape.scope do
+tape do
   COUNTER.reset
   check(Slim.render("spec/splat-once.slim").to_s, "<span class=\"first middle last &amp; more\" title=\"x&lt;y\"></span>")
   check(COUNTER.calls.to_s, "1")
@@ -105,7 +105,7 @@ end
 
 # Signed minimum, unsigned maximum, zero and raw numeric output keep their bytes.
 values = [0_i64, -1_i64, 9223372036854775807_i64, -9223372036854775807_i64 - 1_i64]
-Tape.scope do
+tape do
   values.each do |value|
     buffer = Slim::TapeBuffer.new
     Slim.write_escaped(buffer, value)
@@ -125,13 +125,13 @@ check(Slim.escape(""), "")
 check(Slim.render_string("spec/tape-first.slim"), "<p>true</p>")
 raise "render left a tape active" unless IyiRegion.tape == 0_u64
 retained = ""
-Tape.scope do
-  sentinel = TapeString.build { |writer| writer.append("still alive") }
+tape do
+  sentinel = Tape::String.build { |writer| writer.append("still alive") }
   retained = Slim.render_string("spec/tape-first.slim")
   check(sentinel.to_s, "still alive")
   check(Slim.render("spec/tape-first.slim").to_s, retained)
 end
-Tape.scope do
+tape do
   overwrite = Slim::TapeBuffer.new
   overwrite << "overwrite released storage"
 end
@@ -139,6 +139,6 @@ check(retained, "<p>true</p>")
 raise "nested render left a tape active" unless IyiRegion.tape == 0_u64
 puts "PASS: render uses tape, render_string copies retained output and preserves outer scopes"
 
-Tape.scope do
+tape do
   check(Slim.render("spec/tape-first.slim").to_s, "<p>true</p>")
 end

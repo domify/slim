@@ -32,15 +32,15 @@ if "$RIS" check test/refused/outer.ri > "$scratch/outer.log" 2>&1; then
   echo 'FAIL: tape result assigned outside its scope'
   exit 1
 fi
-if ! rg -q 'is a variable of the code around this Tape.scope' "$scratch/outer.log"; then
+if ! rg -q 'is a variable of the code around this tape block' "$scratch/outer.log"; then
   cat "$scratch/outer.log"
   exit 1
 fi
 if "$RIS" run test/no_scope.ri > "$scratch/no-scope.log" 2>&1; then
-  echo 'FAIL: default render allocated outside Tape.scope'
+  echo 'FAIL: default render allocated outside a tape block'
   exit 1
 fi
-if ! rg -q 'a tape value made outside Tape.scope' "$scratch/no-scope.log"; then
+if ! rg -q 'a tape value made outside a tape block' "$scratch/no-scope.log"; then
   cat "$scratch/no-scope.log"
   exit 1
 fi

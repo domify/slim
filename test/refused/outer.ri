@@ -2,7 +2,7 @@ module refused_outer
 import slim::{Slim}
 
 kept = nil
-Tape.scope do
+tape do
   kept = Slim.render("../../spec/text-inline.slim")
 end
 puts kept

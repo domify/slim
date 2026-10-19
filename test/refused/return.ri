@@ -1,8 +1,8 @@
 module refused_return
 import slim::{Slim}
 
-def invalid : TapeString
-  Tape.scope do
+def invalid : Tape::String
+  tape do
     return Slim.render("../../spec/text-inline.slim")
   end
   raise "unreachable"

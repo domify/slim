@@ -15,7 +15,7 @@ macro checked_render(filename)
   {% else %}
     begin
       %actual = ""
-      Tape.scope do
+      tape do
         %actual = ::Slim::Slim.render({{filename}}, 1).to_s
       end
       %actual
@@ -56,9 +56,9 @@ end
 
 def local_tape : String
   result = ""
-  Tape.scope do
-    text = TapeString.build(1) { |writer| writer.append("<&>") }
-    raw = TapeString.build(1) { |writer| writer.append("<b>raw</b>") }
+  tape do
+    text = Tape::String.build(1) { |writer| writer.append("<&>") }
+    raw = Tape::String.build(1) { |writer| writer.append("<b>raw</b>") }
     outer = IyiRegion.tape
     cursor = IyiHeap.read64(outer)
     20.times do

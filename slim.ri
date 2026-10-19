@@ -18,10 +18,10 @@
 #         input type="checkbox" checked=selected
 #         p Hello, #{name}!         / text is HTML; #{} in it is escaped
 #
-# `render` returns TapeString bytes owned by the caller's Tape.scope.
+# `render` returns Tape::String bytes owned by the caller's tape block.
 # `render_string` uses its own Tape.local and copies a retained String.
 # `embed` accepts TapeBuffer or a user writer. Escaping and class joining
-# stream into the sink; integer output and TapeString values need no temporary String.
+# stream into the sink; integer output and Tape::String values need no temporary String.
 #
 # As in Slim, the HTML has no whitespace between tags: `'` ends text with a
 # space, and `tag<` / `tag>` / `=<` / `=>` put one before / after.
@@ -44,14 +44,14 @@ module slim
 import std/text
 
 pub struct Slim
-  # Owned by the caller's Tape.scope. `finish` borrows its bytes;
+  # Owned by the caller's tape block. `finish` borrows its bytes;
   # `to_s` makes an independent String for a retained response body.
   @[OnTape]
   pub struct TapeBuffer
-    @writer : TapeWriter
+    @writer : Tape::String::Writer
 
     def initialize(capacity : Int32 = 256)
-      @writer = TapeWriter.new(capacity)
+      @writer = Tape::String::Writer.new(capacity)
     end
 
     def <<(text : String) : TapeBuffer
@@ -67,7 +67,17 @@ pub struct Slim
       end
     end
 
-    def finish : TapeString
+    # Text already on the tape, as it is or escaped: the writer reads it
+    # where it lies.
+    def write(text : Tape::String) : Nil
+      @writer.append(text)
+    end
+
+    def write_escaped(text : Tape::String) : Nil
+      @writer.append_html_escaped(text)
+    end
+
+    def finish : Tape::String
       @writer.finish
     end
 
@@ -90,16 +100,30 @@ pub struct Slim
     buffer << value.to_s
   end
 
-  def self.write_raw(buffer : B, value : TapeString) : Nil forall B
-    write_bytes(buffer, value.to_unsafe, value.bytesize)
+  def self.write_raw(buffer : B, value : Tape::String) : Nil forall B
+    write_tape(buffer, value, false)
+  end
+
+  # A value on the tape into *buffer*, escaped or not: a tape buffer or
+  # writer takes it where it lies; any other buffer, as a String.
+  def self.write_tape(buffer : TapeBuffer, value : Tape::String, escape : Bool) : Nil
+    escape ? buffer.write_escaped(value) : buffer.write(value)
+  end
+
+  def self.write_tape(buffer : Tape::String::Writer, value : Tape::String, escape : Bool) : Nil
+    escape ? buffer.append_html_escaped(value) : buffer.append(value)
+  end
+
+  def self.write_tape(buffer : B, value : Tape::String, escape : Bool) : Nil forall B
+    escape ? escape_text(buffer, value.to_s) : (buffer << value.to_s)
   end
 
   def self.write_escaped(buffer : B, value : T) : Nil forall B, T
     escape_text(buffer, value.to_s)
   end
 
-  def self.write_escaped(buffer : B, value : TapeString) : Nil forall B
-    escape_text(buffer, value)
+  def self.write_escaped(buffer : B, value : Tape::String) : Nil forall B
+    write_tape(buffer, value, true)
   end
 
   DIGITS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
@@ -133,7 +157,7 @@ pub struct Slim
     end
   end
 
-  def self.escape_text(buffer : B, text : String | TapeString) : Nil forall B
+  def self.escape_text(buffer : B, text : String) : Nil forall B
     ptr = text.to_unsafe
     start = 0
     i = 0
@@ -163,7 +187,7 @@ pub struct Slim
       byte = text.to_unsafe[i]
       if byte == 38_u8 || byte == 60_u8 || byte == 62_u8 || byte == 34_u8 || byte == 39_u8
         result = ""
-        Tape.scope do
+        tape do
           buffer = TapeBuffer.new(text.bytesize)
           write_escaped(buffer, text)
           result = buffer.to_s
@@ -218,7 +242,7 @@ pub struct Slim
     {{ run("./slim/process", @caller.first.filename || "", filename, buffer.id.stringify) }}
   end
 
-  # The default result is borrowed from the caller's active Tape.scope.
+  # The default result is borrowed from the caller's active tape block.
   macro render(filename, capacity = 256)
     begin
       %buf = ::Slim::Slim::TapeBuffer.new({{capacity}})
