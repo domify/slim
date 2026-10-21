@@ -83,7 +83,7 @@ def tape_page(expected : String) : Nil
     text = Tape::String.build(1) { |writer| writer.append("<&>\"' café Привет") }
     raw = Tape::String.build(1) { |writer| writer.append("<b>raw</b>") }
     page = Slim.render("spec/streaming.slim", 0)
-    copy = page.to_s
+    copy = page.to_heap
     check(copy, expected)
   end
   check(copy, expected)
@@ -98,7 +98,7 @@ check(COUNTER.calls.to_s, "1")
 check(COUNTER.events, "classsplat")
 tape do
   COUNTER.reset
-  check(Slim.render("spec/splat-once.slim").to_s, "<span class=\"first middle last &amp; more\" title=\"x&lt;y\"></span>")
+  check(Slim.render("spec/splat-once.slim").to_heap, "<span class=\"first middle last &amp; more\" title=\"x&lt;y\"></span>")
   check(COUNTER.calls.to_s, "1")
   check(COUNTER.events, "classsplat")
 end
@@ -128,8 +128,8 @@ retained = ""
 tape do
   sentinel = Tape::String.build { |writer| writer.append("still alive") }
   retained = Slim.render_string("spec/tape-first.slim")
-  check(sentinel.to_s, "still alive")
-  check(Slim.render("spec/tape-first.slim").to_s, retained)
+  check(sentinel.to_heap, "still alive")
+  check(Slim.render("spec/tape-first.slim").to_heap, retained)
 end
 tape do
   overwrite = Slim::TapeBuffer.new
@@ -140,5 +140,5 @@ raise "nested render left a tape active" unless IyiRegion.tape == 0_u64
 puts "PASS: render uses tape, render_string copies retained output and preserves outer scopes"
 
 tape do
-  check(Slim.render("spec/tape-first.slim").to_s, "<p>true</p>")
+  check(Slim.render("spec/tape-first.slim").to_heap, "<p>true</p>")
 end

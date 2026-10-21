@@ -16,7 +16,7 @@ macro checked_render(filename)
     begin
       %actual = ""
       tape do
-        %actual = ::Slim::Slim.render({{filename}}, 1).to_s
+        %actual = ::Slim::Slim.render({{filename}}, 1).to_heap
       end
       %actual
     end
@@ -65,7 +65,7 @@ def independent_render : String
       result = Slim.render_string("spec/local-tape.slim", 1)
       raise "render_string changed caller's tape" unless IyiRegion.tape == outer
       raise "render_string retained temporary buffers" unless IyiHeap.read64(outer) == cursor
-      raise "render_string damaged outer text" unless text.to_s == "<&>"
+      raise "render_string damaged outer text" unless text == "<&>"
     end
   end
   result

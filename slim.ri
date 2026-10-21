@@ -82,7 +82,7 @@ pub struct Slim
     end
 
     def to_s : String
-      finish.to_s
+      finish.to_heap
     end
   end
 
@@ -257,7 +257,7 @@ pub struct Slim
     begin
       %result = ""
       ::local_tape do
-        %result = ::Slim::Slim.render({{filename}}, {{capacity}}).to_s
+        %result = ::Slim::Slim.render({{filename}}, {{capacity}}).to_heap
       end
       %result
     end
